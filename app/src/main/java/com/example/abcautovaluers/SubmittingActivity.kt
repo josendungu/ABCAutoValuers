@@ -3,7 +3,10 @@ package com.example.abcautovaluers
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.ResultReceiver
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -24,17 +27,16 @@ import java.util.*
 
 class SubmittingActivity : AppCompatActivity() {
 
-    private lateinit var mDriveServiceHelper: DriveServiceHelper
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     private val tag = "Submitting"
     private val SIGNIN_CODE = 1
 
-    private val account: GoogleSignInAccount? by lazy {
+    private var account: GoogleSignInAccount? =
         GoogleSignIn.getLastSignedInAccount(
             applicationContext
         )
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,46 +46,19 @@ class SubmittingActivity : AppCompatActivity() {
 
         textViewAccount.setOnClickListener {
 
-            handleCreateFolder()
+            val resultReceiver = MyResultReceiver(null)
+
+            val intent = Intent(this, SubmittingService::class.java)
+            intent.putExtra("account", account)
+            intent.putExtra("receiver", resultReceiver)
+            startService(intent)
+            //handlePrepareSaveValuation()
 
         }
 
 
     }
 
-    private fun handleCreateFolder() {
-        mDriveServiceHelper.createFile()
-            .addOnSuccessListener { googleDriveFileHolder ->
-                val gson = Gson()
-                Log.d(
-                    tag, "onSuccess: " + gson.toJson(googleDriveFileHolder)
-                )
-            }
-            .addOnFailureListener { e ->
-                Log.d(
-                    tag, "onFailure: " + e.message
-                )
-
-            }
-
-
-        // you can provide  folder id in case you want to save this file inside some folder.
-        // if folder id is null, it will save file to the root
-//        mDriveServiceHelper.createFolder("testDummyss", null)
-//            .addOnSuccessListener { googleDriveFileHolder ->
-//                val gson = Gson()
-//                Log.d(
-//                    tag, "onSuccess: " + gson.toJson(googleDriveFileHolder)
-//                )
-//            }
-//            .addOnFailureListener { e ->
-//                Log.d(
-//                    tag, "onFailure: " + e.message
-//                )
-//
-//            }
-
-    }
 
     private fun initializeGoogleSignIn() {
 
@@ -93,7 +68,6 @@ class SubmittingActivity : AppCompatActivity() {
 
             textViewAccount.text = account!!.email
             Log.d(tag, "Account present")
-            mDriveServiceHelper = DriveServiceHelper(getGoogleDriveService(account!!))
 
         }
 
@@ -121,7 +95,7 @@ class SubmittingActivity : AppCompatActivity() {
 
                 Log.d(tag, "Signed in as ${it.email}")
                 textViewAccount.text = it.email
-                mDriveServiceHelper = DriveServiceHelper(getGoogleDriveService(it))
+                account = it
 
             }
 
@@ -140,21 +114,7 @@ class SubmittingActivity : AppCompatActivity() {
 
     }
 
-    private fun getGoogleDriveService(account: GoogleSignInAccount): Drive {
 
-        val credential = GoogleAccountCredential.usingOAuth2(
-            this, Collections.singleton(DriveScopes.DRIVE_FILE)
-        )
-        credential.selectedAccount = account.account
-
-        return Drive.Builder(
-            AndroidHttp.newCompatibleTransport(),
-            GsonFactory(),
-            credential
-        )
-            .setApplicationName("ABC Auto Valuers")
-            .build()
-    }
 
     private fun buildGoogleSignInOptions(): GoogleSignInOptions {
         return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -164,7 +124,14 @@ class SubmittingActivity : AppCompatActivity() {
             .build()
     }
 
+    private class MyResultReceiver(handler: Handler?) : ResultReceiver(handler) {
 
+        override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
+            super.onReceiveResult(resultCode, resultData)
+
+
+        }
+    }
 
 
 }

@@ -87,15 +87,25 @@ public class DriveServiceHelper {
     /**
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
-    public Task<String> createFile() {
+    public Task<String> createFile(final String folderId) {
         return Tasks.call(mExecutor, new Callable<String>() {
             @Override
             public String call() throws Exception {
 
                 try {
 
+                    List<String> root;
+
+                    if (folderId == null) {
+                        root = Collections.singletonList("root");
+                    } else {
+
+                        root = Collections.singletonList(folderId);
+
+                    }
+
                     File metadata = new File()
-                            .setParents(Collections.singletonList("root"))
+                            .setParents(root)
                             .setMimeType("text/plain")
                             .setName("Untitled file");
 
@@ -111,6 +121,31 @@ public class DriveServiceHelper {
                     return null;
 
                 }
+            }
+        });
+    }
+
+
+    public Task<GoogleDriveFileHolder> searchFolder(final String folderName) {
+        return Tasks.call(mExecutor, new Callable<GoogleDriveFileHolder>() {
+            @Override
+            public GoogleDriveFileHolder call() throws Exception {
+
+                Log.d(tag, "We starting the search");
+                FileList result = mDriveService.files().list()
+                        .setQ("mimeType = '" + TYPE_GOOGLE_DRIVE_FOLDER + "' and name = '" + folderName + "' ")
+                        .setSpaces("drive")
+                        .execute();
+                GoogleDriveFileHolder googleDriveFileHolder = new GoogleDriveFileHolder();
+                if (result.getFiles().size() > 0) {
+                    googleDriveFileHolder.setId(result.getFiles().get(0).getId());
+                    googleDriveFileHolder.setName(result.getFiles().get(0).getName());
+
+                    Log.d(tag, "ID: "+googleDriveFileHolder.getId());
+                    Log.d(tag, "Name: "+googleDriveFileHolder.getName());
+
+                }
+                return googleDriveFileHolder;
             }
         });
     }
@@ -265,8 +300,9 @@ public class DriveServiceHelper {
 
                     String id = googleFile.getId();
 
-                    Log.d(tag, id);
+                    Log.d(tag, "Id: "+id);
                     googleDriveFileHolder.setId(id);
+                    googleDriveFileHolder.setName(folderName);
                     return googleDriveFileHolder;
 
                 } catch (UserRecoverableAuthIOException e) {
