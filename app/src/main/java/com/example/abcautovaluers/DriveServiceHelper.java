@@ -16,21 +16,26 @@ package com.example.abcautovaluers;
  */
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.util.Pair;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,9 +53,9 @@ import java.util.concurrent.Executors;
 public class DriveServiceHelper {
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
     private final Drive mDriveService;
+    private Context mContext;
 
     private String tag = "DriveServiceHelper";
-
 
 
     public static String TYPE_AUDIO = "application/vnd.google-apps.audio";
@@ -74,6 +79,7 @@ public class DriveServiceHelper {
     public DriveServiceHelper(Drive driveService) {
 
         mDriveService = driveService;
+//        mContext = context;
         Log.d(tag, "DriveServiceHelper in");
 
     }
@@ -85,17 +91,26 @@ public class DriveServiceHelper {
         return Tasks.call(mExecutor, new Callable<String>() {
             @Override
             public String call() throws Exception {
-                File metadata = new File()
-                        .setParents(Collections.singletonList("root"))
-                        .setMimeType("text/plain")
-                        .setName("Untitled file");
 
-                File googleFile = mDriveService.files().create(metadata).execute();
-                if (googleFile == null) {
-                    throw new IOException("Null result when requesting file creation.");
+                try {
+
+                    File metadata = new File()
+                            .setParents(Collections.singletonList("root"))
+                            .setMimeType("text/plain")
+                            .setName("Untitled file");
+
+                    File googleFile = mDriveService.files().create(metadata).execute();
+                    if (googleFile == null) {
+                        throw new IOException("Null result when requesting file creation.");
+                    }
+
+                    return googleFile.getId();
+                } catch (Exception e){
+
+                    Log.d(tag,"Exception thrown: "+e.toString());
+                    return null;
+
                 }
-
-                return googleFile.getId();
             }
         });
     }
@@ -221,26 +236,52 @@ public class DriveServiceHelper {
             @Override
             public GoogleDriveFileHolder call() throws Exception {
 
-                GoogleDriveFileHolder googleDriveFileHolder = new GoogleDriveFileHolder();
 
-                List<String> root;
-                if (folderId == null) {
-                    root = Collections.singletonList("root");
-                } else {
+                Log.d(tag, "we starting the upload code");
+                try {
+                    GoogleDriveFileHolder googleDriveFileHolder = new GoogleDriveFileHolder();
 
-                    root = Collections.singletonList(folderId);
+                    List<String> root;
+                    if (folderId == null) {
+                        root = Collections.singletonList("root");
+                    } else {
+
+                        root = Collections.singletonList(folderId);
+
+                    }
+
+                    File metadata = new File()
+                            .setParents(root)
+                            .setMimeType(TYPE_GOOGLE_DRIVE_FOLDER)
+                            .setName(folderName);
+
+                    File googleFile = mDriveService.files().create(metadata).execute();
+                    if (googleFile == null) {
+
+                        Log.d(tag, "is null");
+                        throw new IOException("Null result when requesting file creation.");
+
+                    }
+
+                    String id = googleFile.getId();
+
+                    Log.d(tag, id);
+                    googleDriveFileHolder.setId(id);
+                    return googleDriveFileHolder;
+
+                } catch (UserRecoverableAuthIOException e) {
+
+                    Log.d(tag,"Exception thrown");
+                    return null;
+
+                } catch (Exception e) {
+
+                    Log.d(tag, "Error " + e.toString());
+                    throw new IOException(e);
+
+
                 }
-                File metadata = new File()
-                        .setParents(root)
-                        .setMimeType(TYPE_GOOGLE_DRIVE_FOLDER)
-                        .setName(folderName);
 
-                File googleFile = mDriveService.files().create(metadata).execute();
-                if (googleFile == null) {
-                    throw new IOException("Null result when requesting file creation.");
-                }
-                googleDriveFileHolder.setId(googleFile.getId());
-                return googleDriveFileHolder;
             }
         });
     }

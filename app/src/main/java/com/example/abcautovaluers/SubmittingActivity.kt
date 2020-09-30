@@ -5,12 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.startActivityForResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.Scope
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
@@ -24,7 +27,7 @@ class SubmittingActivity : AppCompatActivity() {
     private lateinit var mDriveServiceHelper: DriveServiceHelper
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
-    private val tag = "SubmittingActivity"
+    private val tag = "Submitting"
     private val SIGNIN_CODE = 1
 
     private val account: GoogleSignInAccount? by lazy {
@@ -39,9 +42,17 @@ class SubmittingActivity : AppCompatActivity() {
 
         initializeGoogleSignIn()
 
-        // you can provide  folder id in case you want to save this file inside some folder.
-        // if folder id is null, it will save file to the root
-        mDriveServiceHelper.createFolder("testDummyss", null)
+        textViewAccount.setOnClickListener {
+
+            handleCreateFolder()
+
+        }
+
+
+    }
+
+    private fun handleCreateFolder() {
+        mDriveServiceHelper.createFile()
             .addOnSuccessListener { googleDriveFileHolder ->
                 val gson = Gson()
                 Log.d(
@@ -50,11 +61,27 @@ class SubmittingActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e ->
                 Log.d(
-                    tag,"onFailure: " + e.message
+                    tag, "onFailure: " + e.message
                 )
+
             }
 
 
+        // you can provide  folder id in case you want to save this file inside some folder.
+        // if folder id is null, it will save file to the root
+//        mDriveServiceHelper.createFolder("testDummyss", null)
+//            .addOnSuccessListener { googleDriveFileHolder ->
+//                val gson = Gson()
+//                Log.d(
+//                    tag, "onSuccess: " + gson.toJson(googleDriveFileHolder)
+//                )
+//            }
+//            .addOnFailureListener { e ->
+//                Log.d(
+//                    tag, "onFailure: " + e.message
+//                )
+//
+//            }
 
     }
 
@@ -64,7 +91,7 @@ class SubmittingActivity : AppCompatActivity() {
             requestUserSignIn()
         } else {
 
-
+            textViewAccount.text = account!!.email
             Log.d(tag, "Account present")
             mDriveServiceHelper = DriveServiceHelper(getGoogleDriveService(account!!))
 
@@ -75,7 +102,7 @@ class SubmittingActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        when (requestCode)  {
+        when (requestCode) {
 
             SIGNIN_CODE -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
@@ -94,9 +121,7 @@ class SubmittingActivity : AppCompatActivity() {
 
                 Log.d(tag, "Signed in as ${it.email}")
                 textViewAccount.text = it.email
-                mDriveServiceHelper = DriveServiceHelper(account?.let { it1 ->
-                    getGoogleDriveService(it1)
-                })
+                mDriveServiceHelper = DriveServiceHelper(getGoogleDriveService(it))
 
             }
 
@@ -133,9 +158,12 @@ class SubmittingActivity : AppCompatActivity() {
 
     private fun buildGoogleSignInOptions(): GoogleSignInOptions {
         return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestScopes(Scope(DriveScopes.DRIVE))
+            .requestScopes(Scope(DriveScopes.DRIVE_FILE))
             .requestEmail()
             .build()
     }
+
 
 
 
