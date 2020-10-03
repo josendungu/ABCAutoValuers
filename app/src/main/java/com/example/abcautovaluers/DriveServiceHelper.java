@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.ByteArrayContent;
+import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
@@ -40,11 +41,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import static com.example.abcautovaluers.ValuationInstance.*;
 
 /**
  * A utility for performing read/write operations on Drive files via the REST API and opening a
@@ -83,7 +90,6 @@ public class DriveServiceHelper {
         Log.d(tag, "DriveServiceHelper in");
 
     }
-
     /**
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
@@ -125,7 +131,6 @@ public class DriveServiceHelper {
         });
     }
 
-
     public Task<GoogleDriveFileHolder> searchFolder(final String folderName) {
         return Tasks.call(mExecutor, new Callable<GoogleDriveFileHolder>() {
             @Override
@@ -149,7 +154,6 @@ public class DriveServiceHelper {
             }
         });
     }
-
     /**
      * Opens the file identified by {@code fileId} and returns a {@link Pair} of its name and
      * contents.
@@ -178,17 +182,19 @@ public class DriveServiceHelper {
             }
         });
     }
-
     /**
      * Updates the file identified by {@code fileId} with the given {@code name} and {@code
      * content}.
      */
-    public Task<Void> saveFile(final String fileId, final String name, final String content) {
+    public Task<Void> saveFile(final String fileId, final String folderId, final String name, final String content) {
         return Tasks.call(mExecutor, new Callable<Void>() {
             @Override
             public Void call() throws Exception {
                 // Create a File containing any metadata changes.
-                File metadata = new File().setName(name);
+                File metadata = new File()
+                        .setName(name)
+                        .setParents(Collections.singletonList(folderId))
+                        .setMimeType(TYPE_PHOTO);
 
                 // Convert content to an AbstractInputStreamContent instance.
                 ByteArrayContent contentStream = ByteArrayContent.fromString("text/plain", content);
@@ -196,6 +202,41 @@ public class DriveServiceHelper {
                 // Update the metadata and contents.
                 mDriveService.files().update(fileId, metadata, contentStream).execute();
                 return null;
+            }
+        });
+    }
+
+    public Task<List<GoogleDriveFileHolder>> uploadImages(final HashMap<String, java.io.File> valuationData, final String folderId) {
+        return Tasks.call(mExecutor, new Callable<List<GoogleDriveFileHolder>>() {
+            @Override
+            public List<GoogleDriveFileHolder> call() throws Exception {
+                // Retrieve the metadata as a File object.
+
+                boolean state = true;
+                List<String> root = Collections.singletonList(folderId);
+                List<GoogleDriveFileHolder> googleDriveFileHolders = new ArrayList<>();
+
+                for (java.util.Map.Entry<String, java.io.File> stringFileEntry : valuationData.entrySet()) {
+
+                    String name = stringFileEntry.getKey();
+                    java.io.File file = stringFileEntry.getValue();
+                    File metadata = new File()
+                            .setParents(root)
+                            .setName(name);
+
+                    FileContent fileContent = new FileContent("image/jpeg", file);
+
+                    File fileMeta = mDriveService.files().create(metadata, fileContent).setFields("id").execute();
+                    GoogleDriveFileHolder googleDriveFileHolder = new GoogleDriveFileHolder();
+                    googleDriveFileHolder.setId(fileMeta.getId());
+                    googleDriveFileHolder.setName(fileMeta.getName());
+
+
+                    googleDriveFileHolders.add(googleDriveFileHolder);
+
+                }
+
+                return googleDriveFileHolders;
             }
         });
     }

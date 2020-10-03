@@ -6,23 +6,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_submitting.*
-import java.util.*
 
 
 class SubmittingActivity : AppCompatActivity() {
@@ -32,32 +23,35 @@ class SubmittingActivity : AppCompatActivity() {
     private val tag = "Submitting"
     private val SIGNIN_CODE = 1
 
-    private var account: GoogleSignInAccount? =
-        GoogleSignIn.getLastSignedInAccount(
-            applicationContext
-        )
-
+    private lateinit var account: GoogleSignInAccount
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submitting)
+
+        account = GoogleSignIn.getLastSignedInAccount(this)!!
 
         initializeGoogleSignIn()
 
         textViewAccount.setOnClickListener {
 
             val resultReceiver = MyResultReceiver(null)
+            val valuationInstance = ValuationInstance(this)
+            val valuationData = valuationInstance.valuationData
+
 
             val intent = Intent(this, SubmittingService::class.java)
             intent.putExtra("account", account)
+            intent.putExtra("data", valuationData)
+            intent.putExtra("plate_no", valuationInstance.plateNumber)
             intent.putExtra("receiver", resultReceiver)
             startService(intent)
             //handlePrepareSaveValuation()
 
         }
 
-
     }
+
 
 
     private fun initializeGoogleSignIn() {
@@ -113,8 +107,6 @@ class SubmittingActivity : AppCompatActivity() {
         startActivityForResult(mGoogleSignInClient.signInIntent, SIGNIN_CODE)
 
     }
-
-
 
     private fun buildGoogleSignInOptions(): GoogleSignInOptions {
         return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

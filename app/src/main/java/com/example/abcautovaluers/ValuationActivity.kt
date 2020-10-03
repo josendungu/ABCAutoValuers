@@ -4,30 +4,18 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import kotlinx.android.synthetic.main.activity_valuation.*
 import java.io.File
-import java.util.*
 
 class ValuationActivity : AppCompatActivity() {
 
@@ -98,28 +86,25 @@ class ValuationActivity : AppCompatActivity() {
 
         buttonSubmit.setOnClickListener {
 
-            val intent = Intent(this, SubmittingActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            val plateNumber = textPlateNumber.editText?.text.toString()
 
-//            val plateNumber = textPlateNumber.editText?.text
-//
-//            if (plateNumber == null){
-//
-//                if (valuationInstanceCheck()){
-//
-//                    val intent = Intent(this, SubmittingActivity::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                    startActivity(intent)
-//
-//                }
-//
-//            } else {
-//
-//                textPlateNumber.requestFocus()
-//                textPlateNumber.error = "Plate number can not be empty"
-//
-//            }
+            if (plateNumber.isNotEmpty()){
+
+                valuationInstance.addValuationItem(ValuationInstance.KEY_PLATE_NO, plateNumber)
+                if (valuationInstanceCheck()){
+
+                    val intent = Intent(this, SubmittingActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+
+                }
+
+            } else {
+
+                textPlateNumber.requestFocus()
+                textPlateNumber.error = "Plate number can not be empty"
+
+            }
 
 
 
@@ -413,7 +398,7 @@ class ValuationActivity : AppCompatActivity() {
             LOG_BOOK_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_LOG_BOOK,
                         photoFile.absolutePath
                     )
@@ -427,7 +412,7 @@ class ValuationActivity : AppCompatActivity() {
             KRA_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_KRA,
                         photoFile.absolutePath
                     )
@@ -441,7 +426,7 @@ class ValuationActivity : AppCompatActivity() {
             ID_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_ID,
                         photoFile.absolutePath
                     )
@@ -454,7 +439,7 @@ class ValuationActivity : AppCompatActivity() {
             INSTRUCTIONS_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_INSTRUCTIONS,
                         photoFile.absolutePath
                     )
@@ -467,7 +452,7 @@ class ValuationActivity : AppCompatActivity() {
             FRONT_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_FRONT,
                         photoFile.absolutePath
                     )
@@ -481,7 +466,7 @@ class ValuationActivity : AppCompatActivity() {
             FRONT_RIGHT_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_FRONT_RIGHT,
                         photoFile.absolutePath
                     )
@@ -495,7 +480,7 @@ class ValuationActivity : AppCompatActivity() {
             FRONT_LEFT_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_FRONT_LEFT,
                         photoFile.absolutePath
                     )
@@ -509,7 +494,7 @@ class ValuationActivity : AppCompatActivity() {
             REAR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_REAR,
                         photoFile.absolutePath
                     )
@@ -523,7 +508,7 @@ class ValuationActivity : AppCompatActivity() {
             REAR_RIGHT_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_REAR_RIGHT,
                         photoFile.absolutePath
                     )
@@ -537,7 +522,7 @@ class ValuationActivity : AppCompatActivity() {
             REAR_LEFT_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_REAR_LEFT,
                         photoFile.absolutePath
                     )
@@ -551,7 +536,7 @@ class ValuationActivity : AppCompatActivity() {
             MILLAGE_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_MILLAGE,
                         photoFile.absolutePath
                     )
@@ -565,7 +550,7 @@ class ValuationActivity : AppCompatActivity() {
             HEAD_LIGHT_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_HEAD_LIGHT,
                         photoFile.absolutePath
                     )
@@ -579,7 +564,7 @@ class ValuationActivity : AppCompatActivity() {
             DASHBOARD_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_DASHBOARD,
                         photoFile.absolutePath
                     )
@@ -593,7 +578,7 @@ class ValuationActivity : AppCompatActivity() {
             RADIO_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_RADIO,
                         photoFile.absolutePath
                     )
@@ -607,7 +592,7 @@ class ValuationActivity : AppCompatActivity() {
             INSURANCE_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_INSURANCE,
                         photoFile.absolutePath
                     )
@@ -621,7 +606,7 @@ class ValuationActivity : AppCompatActivity() {
             CHASSIS_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    valuationInstance.createValuationInstance(
+                    valuationInstance.addValuationItem(
                         ValuationInstance.KEY_CHASSIS,
                         photoFile.absolutePath
                     )
@@ -647,7 +632,5 @@ class ValuationActivity : AppCompatActivity() {
         PopulateAlert(KEY_BACK_PRESSED_ALERT, this)
 
     }
-
-
 
 }
