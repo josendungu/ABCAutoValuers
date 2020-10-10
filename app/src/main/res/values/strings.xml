@@ -29,7 +29,7 @@
     <string name="chassis">Chassis</string>
     <string name="submit">Submit</string>
     <string name="submitting_data">Submitting Data</string>
-    <string name="take_time">This may take some time</string>
+    <string name="take_time">This may take some time…</string>
     <string name="there_has_been_an_error_uploading_please_try_again">There has been an error uploading. Please try again!</string>
     <string name="ok">OK</string>
     <string name="error_message"> %1$s photo has not been set</string>
@@ -46,4 +46,11 @@
     <string name="save">Save</string>
     <string name="don_t_save">Don\'t Save</string>
     <string name="server_client_id">569558796081-58p16nqvg72c5n7oemj5fuaonmokbc1a.apps.googleusercontent.com</string>
+    <string name="success">Success</string>
+    <string name="check_image">Check Image</string>
+    <string name="images_were_successfully_uploaded">Images were successfully uploaded.</string>
+    <string name="account_selected">Account selected:</string>
+    <string name="sample_mail">no email is selected</string>
+    <string name="click_to_change">Click to change</string>
+    <string name="proper_account">Make sure that the proper account\'%1$s\' is selected</string>
 </resources>

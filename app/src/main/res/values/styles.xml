@@ -31,4 +31,22 @@
 
     </style>
 
+
+    <style name="TextPhrase">
+
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="color">@color/colorBlack</item>
+
+    </style>
+
+    <style name="TextSubmitting">
+
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textSize">24sp</item>
+
+    </style>
+
 </resources>

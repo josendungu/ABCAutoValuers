@@ -2,6 +2,7 @@ package com.example.abcautovaluers
 
 import android.app.IntentService
 import android.content.Intent
+import android.os.Bundle
 import android.os.ResultReceiver
 import android.util.Log
 import android.widget.Toast
@@ -24,12 +25,13 @@ class SubmittingService : IntentService("SubmittingService") {
     private lateinit var valuationData: HashMap<String, File>
 
     private lateinit var plateNumber: String
+    private lateinit var resultReceiver: ResultReceiver
     private lateinit var picList: MutableList<File>
 
     override fun onHandleIntent(p0: Intent?) {
 
         val account:GoogleSignInAccount = p0?.extras?.get("account") as GoogleSignInAccount
-        val resultReceiver: ResultReceiver = p0.extras?.get("receiver") as ResultReceiver
+        resultReceiver = p0.extras?.get("receiver") as ResultReceiver
         valuationData = p0.extras?.getSerializable("data") as HashMap<String, File>
         plateNumber = p0.extras?.get("plate_no") as String;
 
@@ -72,13 +74,38 @@ class SubmittingService : IntentService("SubmittingService") {
                 if (it.id == null) {
 
                     mDriveServiceHelper.createFolder("Valuations", null)
-                        .addOnSuccessListener { googleDriveFileHolder ->
+                        .addOnSuccessListener { googleDriveFileHolderCreated ->
                             val gsonValuation = Gson()
                             Log.d(
                                 tag, "onSuccess: " + gsonValuation.toJson(googleDriveFileHolder)
                             )
 
-                            //Continue adding
+                            val bundle = Bundle()
+                            bundle.putString(BUNDLE_FOLDER_CREATED, "Appropriate folders have been created")
+                            resultReceiver.send(FOLDER_CREATED, bundle)
+
+                            mDriveServiceHelper.uploadImages(
+                                valuationData,
+                                googleDriveFileHolderCreated.id
+                            )
+                                .addOnSuccessListener {
+
+                                    val gsonLog = Gson()
+
+                                    val bundle1 = Bundle()
+                                    bundle.putString(BUNDLE_IMAGES_UPLOADED, "Images have been uploaded")
+                                    resultReceiver.send(FOLDER_CREATED, bundle1)
+                                    Log.d(
+                                        tag, "onSuccess: " + gsonLog.toJson(googleDriveFileHolder)
+                                    )
+
+                                }
+                                .addOnFailureListener { exceptionLogBook ->
+
+                                    Log.d(tag, exceptionLogBook.toString())
+                                    showFailure(exceptionLogBook)
+
+                                }
 
 
                         }
@@ -102,6 +129,10 @@ class SubmittingService : IntentService("SubmittingService") {
                                 )
                             )
 
+                            val bundle = Bundle()
+                            bundle.putString(BUNDLE_FOLDER_CREATED, "Appropriate folders have been created")
+                            resultReceiver.send(FOLDER_CREATED, bundle)
+
                             mDriveServiceHelper.uploadImages(
                                 valuationData,
                                 specificFolderId
@@ -109,6 +140,10 @@ class SubmittingService : IntentService("SubmittingService") {
                                 .addOnSuccessListener {
 
                                     val gsonLog = Gson()
+
+                                    val bundle1 = Bundle()
+                                    bundle.putString(BUNDLE_FOLDER_CREATED, "Appropriate folders have been created")
+                                    resultReceiver.send(FOLDER_CREATED, bundle1)
                                     Log.d(
                                         tag, "onSuccess: " + gsonLog.toJson(googleDriveFileHolder)
                                     )

@@ -1,11 +1,13 @@
 package com.example.abcautovaluers
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -23,11 +25,17 @@ class SubmittingActivity : AppCompatActivity() {
     private val tag = "Submitting"
     private val SIGNIN_CODE = 1
 
+    private lateinit var mContext: Context
+
+    private val handler = Handler()
+
     private lateinit var account: GoogleSignInAccount
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submitting)
+
+        mContext = this
 
         account = GoogleSignIn.getLastSignedInAccount(this)!!
 
@@ -35,7 +43,7 @@ class SubmittingActivity : AppCompatActivity() {
 
         textViewAccount.setOnClickListener {
 
-            val resultReceiver = MyResultReceiver(null)
+            val resultReceiver = MyResultReceiver(handler)
             val valuationInstance = ValuationInstance(this)
             val valuationData = valuationInstance.valuationData
 
@@ -56,11 +64,13 @@ class SubmittingActivity : AppCompatActivity() {
 
     private fun initializeGoogleSignIn() {
 
-        if (account == null) {
+        if (account.email == null) {
+
             requestUserSignIn()
+
         } else {
 
-            textViewAccount.text = account!!.email
+            textViewAccount.text = account.email
             Log.d(tag, "Account present")
 
         }
@@ -116,10 +126,27 @@ class SubmittingActivity : AppCompatActivity() {
             .build()
     }
 
-    private class MyResultReceiver(handler: Handler?) : ResultReceiver(handler) {
+    private inner class MyResultReceiver(handler: Handler?) : ResultReceiver(handler) {
 
         override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
             super.onReceiveResult(resultCode, resultData)
+
+            when(resultCode){
+
+                FOLDER_CREATED -> {
+
+                    Toast.makeText(mContext, "Appropriate folders created.", Toast.LENGTH_LONG).show()
+
+                }
+
+                IMAGES_UPLOADED -> {
+
+                    PopulateAlert(KEY_SUCCESS_IMAGES, mContext as Activity)
+
+                }
+
+            }
+
 
 
         }

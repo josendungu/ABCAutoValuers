@@ -17,11 +17,22 @@ const val INSURANCE_CODE = 23
 const val KRA_CODE = 24
 const val FRONT_CODE = 25
 
+const val FOLDER_CREATED = 70
+const val IMAGES_UPLOADED = 71
+
+const val BUNDLE_FOLDER_CREATED = "folder_created"
+const val BUNDLE_IMAGES_UPLOADED = "images_uploaded"
+const val BUNDLE_PASSWORD_DO_NOT_MATCH = "passwords_do_not_match"
+const val BUNDLE_MEMBER_DOES_NOT_EXIST = "member_does_not_exist"
 
 const val KEY_VALUATION_ALERT = 1
 const val KEY_BACK_PRESSED_ALERT = 4
 const val KEY_ERROR = 2
-const val KEY_SUCCESS = 3
+const val KEY_SUCCESS_IMAGES = 3
+
+const val RESPONSE_LOGIN_PASSED = 201
+const val RESPONSE_MEMBER_DOES_NOT_EXIST = 202
+const val RESPONSE_PASSWORD_DOES_NOT_MATCH = 203
 
 
 const val LOG_BOOK_NAME = "log_book.jpg"
@@ -42,4 +53,4 @@ const val KRA_NAME = "kra.jpg"
 const val FRONT_NAME= "front.jpg"
 
 
-const val DASHBOARD_REF = "dashboard"
+const val DASHBOARD_REF = 100

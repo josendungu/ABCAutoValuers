@@ -15,14 +15,12 @@ import kotlinx.android.synthetic.main.valuation_alert.view.*
 
 class PopulateAlert(
     instance: Int,
-    activity: Activity,
-    message: String? = null,
-    private val location: Int? = null
+    activity: Activity
 ) {
 
     private lateinit var view: View
 
-    private var dialog: androidx.appcompat.app.AlertDialog
+    private lateinit var dialog: androidx.appcompat.app.AlertDialog
     private val inflater by lazy { LayoutInflater.from(activity) }
 
     init {
@@ -87,38 +85,24 @@ class PopulateAlert(
                 dialog.show()
 
             }
-            else -> {
+            KEY_SUCCESS_IMAGES -> {
 
-                view = inflater.inflate(R.layout.alert, null)
-                view.tv_info.text = message
+                view = inflater.inflate(R.layout.alert_success, null)
+
+                alert.setView(view)
+                alert.setCancelable(false)
+                dialog = alert.create()
 
 
-                if (location == null) {
+                view.button_action.setOnClickListener {
 
-                    view.button_action.visibility = View.INVISIBLE
-                    alert.setCancelable(true)
-
-                } else {
-
-                    view.button_action.setOnClickListener {
-
-                        //val location = getLocation()
-
-    //                if (location != null) {
-    //
-    //                    val intent = Intent(activity, location)
-    //                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-    //                    activity.startActivity(intent)
-    //
-    //                }
-
-                    }
+                    dialog.cancel()
+                    val intent = Intent(activity, DashboardActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    activity.startActivity(intent)
 
                 }
 
-                alert.setView(view)
-
-                dialog = alert.create()
                 dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
                 dialog.show()
 
@@ -126,14 +110,4 @@ class PopulateAlert(
         }
     }
 
-//    private fun getLocation(): Class<*>? {
-//
-//        return when (location) {
-//            LOGIN_ACTIVITY_REF -> LoginActivity::class.java
-//            DASHBOARD_REF -> DashboardActivity::class.java
-//            else -> null
-//        }
-//
-//
-//    }
 }
