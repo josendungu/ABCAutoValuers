@@ -72,6 +72,31 @@ public class ValuationInstance {
 
     }
 
+    public HashMap<String, String> getValuationPresentState(){
+
+        HashMap<String, String> valuationData = new HashMap<>();
+
+        valuationData.put(KEY_LOG_BOOK, valSession.getString(KEY_LOG_BOOK, null));
+        valuationData.put(KEY_KRA,valSession.getString(KEY_KRA, null));
+        valuationData.put(KEY_ID, valSession.getString(KEY_ID, null));
+        valuationData.put(KEY_INSTRUCTIONS, valSession.getString(KEY_INSTRUCTIONS, null));
+        valuationData.put(KEY_FRONT, valSession.getString(KEY_FRONT, null));
+        valuationData.put(KEY_FRONT_RIGHT, valSession.getString(KEY_FRONT_RIGHT, null));
+        valuationData.put(KEY_FRONT_LEFT, valSession.getString(KEY_FRONT_LEFT, null));
+        valuationData.put(KEY_REAR, valSession.getString(KEY_REAR, null));
+        valuationData.put(KEY_REAR_RIGHT, valSession.getString(KEY_REAR_RIGHT, null));
+        valuationData.put(KEY_REAR_LEFT, valSession.getString(KEY_REAR_LEFT, null));
+        valuationData.put(KEY_MILLAGE, valSession.getString(KEY_MILLAGE, null));
+        valuationData.put(KEY_HEAD_LIGHT, valSession.getString(KEY_HEAD_LIGHT, null));
+        valuationData.put(KEY_DASHBOARD, valSession.getString(KEY_DASHBOARD, null));
+        valuationData.put(KEY_RADIO, valSession.getString(KEY_RADIO, null));
+        valuationData.put(KEY_INSURANCE, valSession.getString(KEY_INSURANCE, null));
+        valuationData.put(KEY_CHASSIS, valSession.getString(KEY_CHASSIS, null));
+
+        return valuationData;
+
+    }
+
     public HashMap<String, File> getValuationData(){
 
         HashMap<String, File> valuationData = new HashMap<>();
