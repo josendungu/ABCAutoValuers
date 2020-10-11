@@ -42,7 +42,6 @@
     <string name="valuation_note">There is a valuation that was not submitted. Would you like to proceed with the valuation or start a new valuation instance? Please note the initial one will be deleted.</string>
     <string name="back_pressed_note">There is a valuation that is not submitted. Would you like to save the valuation instance?</string>
     <string name="start_new">Start New</string>
-    <string name="proceed">Proceed</string>
     <string name="save">Save</string>
     <string name="don_t_save">Don\'t Save</string>
     <string name="server_client_id">569558796081-58p16nqvg72c5n7oemj5fuaonmokbc1a.apps.googleusercontent.com</string>
@@ -56,4 +55,6 @@
     <string name="not_connected">Connection lost! Check your internet connection</string>
     <string name="connected">Your are now connected</string>
     <string name="logo">logo</string>
+    <string name="proceed">Proceed with valuation</string>
+    <string name="welcome">Welcome %1$s</string>
 </resources>

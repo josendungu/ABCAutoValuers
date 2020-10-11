@@ -106,8 +106,6 @@ class SubmittingService : IntentService("SubmittingService") {
                                     showFailure(exceptionLogBook)
 
                                 }
-
-
                         }
                         .addOnFailureListener { e ->
                             Log.d(

@@ -32,17 +32,29 @@
         app:srcCompat="@drawable/ic_logo" />
 
     <TextView
-        android:id="@+id/textViewDateTime"
+        android:id="@+id/textPhrase"
         android:layout_width="0dp"
         android:textAlignment="center"
-        android:padding="5dp"
-        android:fontFamily="@font/montserrat"
-        android:textColor="@color/colorPrimaryDark"
+        android:textAppearance="@style/TextPhrase"
         android:layout_height="wrap_content"
         android:text="@string/statement"
         app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+
+    <TextView
+        android:id="@+id/textMemberName"
+        android:layout_width="0dp"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/montserrat"
+        android:textSize="14sp"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/textPhrase" />
 
     <Button
         android:id="@+id/buttonNew"

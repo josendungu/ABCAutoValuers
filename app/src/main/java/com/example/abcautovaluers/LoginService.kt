@@ -42,6 +42,9 @@ class LoginService: IntentService("Login Service") {
             when (result) {
                 RESPONSE_LOGIN_PASSED.toString() -> {
 
+                    val sessionManager = SessionManager(this)
+                    sessionManager.addMember(email)
+
                     val intent = Intent(this, DashboardActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
+import android.se.omapi.Session
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.widget.ActionBarContainer
@@ -18,6 +19,19 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var password: String
 
     private val handler = Handler()
+
+    override fun onStart() {
+        super.onStart()
+
+        val sessionManager = SessionManager(this)
+        if (sessionManager.checkSessionState()){
+
+            val intent = Intent(this, DashboardActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

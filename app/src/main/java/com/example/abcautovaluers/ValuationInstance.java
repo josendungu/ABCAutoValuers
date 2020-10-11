@@ -34,7 +34,7 @@ public class ValuationInstance {
 
     public ValuationInstance(Context context ){
 
-        valSession = context.getSharedPreferences("userLoginSession", Context.MODE_PRIVATE);
+        valSession = context.getSharedPreferences("valuationInstanceSession", Context.MODE_PRIVATE);
         editor = valSession.edit();
 
 
