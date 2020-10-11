@@ -80,13 +80,14 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/bg_button"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/connection_state"
         app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
         app:layout_constraintStart_toStartOf="@+id/guideline">
 
@@ -108,7 +109,6 @@
             android:id="@+id/accountSelected"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/montserrat_bold"
             android:text="@string/sample_mail"
@@ -122,5 +122,20 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <TextView
+        android:id="@+id/connection_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:fontFamily="@font/montserrat"
+        android:padding="5dp"
+        android:text="@string/connected"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

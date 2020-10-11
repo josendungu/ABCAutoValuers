@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
+import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.widget.ActionBarContainer
+import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -15,12 +17,35 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var email: String
     private lateinit var password: String
 
-
     private val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        val networkConnection = NetworkConnection(applicationContext)
+        networkConnection.observe(this, Observer {
+
+            if (it){
+
+                connection_state.visibility = View.VISIBLE
+                connection_state.text = getString(R.string.connected)
+                connection_state.setBackgroundColor(resources.getColor(R.color.colorSuccess))
+
+                Handler().postDelayed({
+
+                    connection_state.visibility = View.INVISIBLE
+
+                }, 10000)
+
+            } else {
+
+                connection_state.visibility = View.VISIBLE
+                connection_state.text = getString(R.string.not_connected)
+                connection_state.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+
+            }
+        })
 
         val resultReceiver =MyResultReceiver(handler)
 

@@ -7,15 +7,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_submitting.*
+import kotlinx.android.synthetic.main.activity_submitting.connection_state
 
 
 class SubmittingActivity : AppCompatActivity() {
@@ -24,7 +28,6 @@ class SubmittingActivity : AppCompatActivity() {
 
     private val tag = "Submitting"
     private val SIGNIN_CODE = 1
-
     private lateinit var mContext: Context
 
     private val handler = Handler()
@@ -36,6 +39,30 @@ class SubmittingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_submitting)
 
         mContext = this
+
+        val networkConnection = NetworkConnection(applicationContext)
+        networkConnection.observe(this, Observer {
+
+            if (it){
+
+                connection_state.visibility = View.VISIBLE
+                connection_state.text = getString(R.string.connected)
+                connection_state.setBackgroundColor(resources.getColor(R.color.colorSuccess))
+
+                Handler().postDelayed({
+
+                    connection_state.visibility = View.INVISIBLE
+
+                }, 10000)
+
+            } else {
+
+                connection_state.visibility = View.VISIBLE
+                connection_state.text = getString(R.string.not_connected)
+                connection_state.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+
+            }
+        })
 
         account = GoogleSignIn.getLastSignedInAccount(this)!!
 

@@ -53,4 +53,7 @@
     <string name="sample_mail">no email is selected</string>
     <string name="click_to_change">Click to change</string>
     <string name="proper_account">Make sure that the proper account\'%1$s\' is selected</string>
+    <string name="not_connected">Connection lost! Check your internet connection</string>
+    <string name="connected">Your are now connected</string>
+    <string name="logo">logo</string>
 </resources>
