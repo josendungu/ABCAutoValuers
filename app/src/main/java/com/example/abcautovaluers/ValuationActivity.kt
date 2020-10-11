@@ -31,6 +31,8 @@ class ValuationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_valuation)
 
+        handleValuationPresent()
+
         valuationInstance = ValuationInstance(this)
         check = valuationInstance.checkValuation()
 
