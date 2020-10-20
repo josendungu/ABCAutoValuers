@@ -120,6 +120,16 @@
         app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
         app:layout_constraintTop_toBottomOf="@+id/et_password" />
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginProgress"
+        android:visibility="invisible"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSubmit" />
+
     <LinearLayout
         android:id="@+id/snackBar_cont"
         android:layout_width="match_parent"

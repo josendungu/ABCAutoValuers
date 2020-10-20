@@ -32,7 +32,7 @@ class SubmittingActivity : AppCompatActivity() {
 
     private val handler = Handler()
 
-    private lateinit var account: GoogleSignInAccount
+    private var account: GoogleSignInAccount? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,26 +64,26 @@ class SubmittingActivity : AppCompatActivity() {
             }
         })
 
-        account = GoogleSignIn.getLastSignedInAccount(this)!!
+        account = GoogleSignIn.getLastSignedInAccount(this)
 
         initializeGoogleSignIn()
 
-        textViewAccount.setOnClickListener {
 
-            val resultReceiver = MyResultReceiver(handler)
-            val valuationInstance = ValuationInstance(this)
-            val valuationData = valuationInstance.valuationData
+    }
+
+    private fun initializeImagesUpload(){
+
+        val resultReceiver = MyResultReceiver(handler)
+        val valuationInstance = ValuationInstance(this)
+        val valuationData = valuationInstance.valuationData
 
 
-            val intent = Intent(this, SubmittingService::class.java)
-            intent.putExtra("account", account)
-            intent.putExtra("data", valuationData)
-            intent.putExtra("plate_no", valuationInstance.plateNumber)
-            intent.putExtra("receiver", resultReceiver)
-            startService(intent)
-            //handlePrepareSaveValuation()
-
-        }
+        val intent = Intent(this, SubmittingService::class.java)
+        intent.putExtra("account", account)
+        intent.putExtra("data", valuationData)
+        intent.putExtra("plate_no", valuationInstance.plateNumber)
+        intent.putExtra("receiver", resultReceiver)
+        startService(intent)
 
     }
 
@@ -91,14 +91,15 @@ class SubmittingActivity : AppCompatActivity() {
 
     private fun initializeGoogleSignIn() {
 
-        if (account.email == null) {
+        if (account?.email == null) {
 
             requestUserSignIn()
 
         } else {
 
-            textViewAccount.text = account.email
+            accountSelected.text = account?.email
             Log.d(tag, "Account present")
+            initializeImagesUpload()
 
         }
 
@@ -125,8 +126,9 @@ class SubmittingActivity : AppCompatActivity() {
             .addOnSuccessListener {
 
                 Log.d(tag, "Signed in as ${it.email}")
-                textViewAccount.text = it.email
+                accountSelected.text = it.email
                 account = it
+                initializeImagesUpload()
 
             }
 
@@ -170,6 +172,11 @@ class SubmittingActivity : AppCompatActivity() {
 
                     PopulateAlert(KEY_SUCCESS_IMAGES, mContext as Activity)
 
+                }
+
+                ERROR_OCCURRED -> {
+
+                    PopulateAlert(KEY_ERROR_UPLOAD, mContext as Activity)
                 }
 
             }

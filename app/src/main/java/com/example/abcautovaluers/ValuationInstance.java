@@ -76,6 +76,7 @@ public class ValuationInstance {
 
         HashMap<String, String> valuationData = new HashMap<>();
 
+        valuationData.put(KEY_PLATE_NO, valSession.getString(KEY_PLATE_NO, null));
         valuationData.put(KEY_LOG_BOOK, valSession.getString(KEY_LOG_BOOK, null));
         valuationData.put(KEY_KRA,valSession.getString(KEY_KRA, null));
         valuationData.put(KEY_ID, valSession.getString(KEY_ID, null));

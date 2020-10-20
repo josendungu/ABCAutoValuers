@@ -84,33 +84,46 @@ class SubmittingService : IntentService("SubmittingService") {
                             bundle.putString(BUNDLE_FOLDER_CREATED, "Appropriate folders have been created")
                             resultReceiver.send(FOLDER_CREATED, bundle)
 
-                            mDriveServiceHelper.uploadImages(
-                                valuationData,
-                                googleDriveFileHolderCreated.id
-                            )
+                            mDriveServiceHelper.createFolder(specificFolder, googleDriveFileHolderCreated.id)
                                 .addOnSuccessListener {
 
-                                    val gsonLog = Gson()
-
-                                    val bundle1 = Bundle()
-                                    bundle.putString(BUNDLE_IMAGES_UPLOADED, "Images have been uploaded")
-                                    resultReceiver.send(FOLDER_CREATED, bundle1)
-                                    Log.d(
-                                        tag, "onSuccess: " + gsonLog.toJson(googleDriveFileHolder)
+                                    mDriveServiceHelper.uploadImages(
+                                        valuationData,
+                                        googleDriveFileHolderCreated.id
                                     )
+                                        .addOnSuccessListener {
+
+                                            val gsonLog = Gson()
+
+                                            val bundle1 = Bundle()
+                                            bundle.putString(BUNDLE_IMAGES_UPLOADED, "Images have been uploaded")
+                                            resultReceiver.send(IMAGES_UPLOADED, bundle1)
+                                            Log.d(
+                                                tag, "onSuccess: " + gsonLog.toJson(googleDriveFileHolder)
+                                            )
+
+                                        }
+                                        .addOnFailureListener { exceptionImages ->
+
+                                            val bundleErrorImages = Bundle()
+                                            bundleErrorImages.putString(BUNDLE_FOLDER_CREATED, "Error: ${exceptionImages.toString()}")
+                                            resultReceiver.send(ERROR_OCCURRED, bundleErrorImages)
+
+                                        }
+                                }
+
+                                .addOnFailureListener {
+
 
                                 }
-                                .addOnFailureListener { exceptionLogBook ->
 
-                                    Log.d(tag, exceptionLogBook.toString())
-                                    showFailure(exceptionLogBook)
 
-                                }
                         }
                         .addOnFailureListener { e ->
-                            Log.d(
-                                tag, "onFailure: " + e.message
-                            )
+
+                            val bundleErrorFolder = Bundle()
+                            bundleErrorFolder.putString(BUNDLE_FOLDER_CREATED, "Error: ${e.toString()}")
+                            resultReceiver.send(ERROR_OCCURRED, bundleErrorFolder)
 
                         }
 
@@ -140,23 +153,26 @@ class SubmittingService : IntentService("SubmittingService") {
                                     val gsonLog = Gson()
 
                                     val bundle1 = Bundle()
-                                    bundle.putString(BUNDLE_FOLDER_CREATED, "Appropriate folders have been created")
-                                    resultReceiver.send(FOLDER_CREATED, bundle1)
+                                    bundle1.putString(BUNDLE_FOLDER_CREATED, "Appropriate folders have been created")
+                                    resultReceiver.send(IMAGES_UPLOADED, bundle1)
                                     Log.d(
                                         tag, "onSuccess: " + gsonLog.toJson(googleDriveFileHolder)
                                     )
 
                                 }
-                                .addOnFailureListener { exceptionLogBook ->
+                                .addOnFailureListener { exceptionImages ->
 
-                                    Log.d(tag, exceptionLogBook.toString())
-                                    showFailure(exceptionLogBook)
+                                    val bundleErrorImages = Bundle()
+                                    bundleErrorImages.putString(BUNDLE_FOLDER_CREATED, "Error: ${exceptionImages.toString()}")
+                                    resultReceiver.send(ERROR_OCCURRED, bundleErrorImages)
 
                                 }
 
-                        }.addOnFailureListener{ exception ->
+                        }.addOnFailureListener{ exceptionFolder ->
 
-                            showFailure(exception)
+                            val bundleErrorFolder = Bundle()
+                            bundleErrorFolder.putString(BUNDLE_FOLDER_CREATED, "Error: ${exceptionFolder.toString()}")
+                            resultReceiver.send(ERROR_OCCURRED, bundleErrorFolder)
 
                         }
 

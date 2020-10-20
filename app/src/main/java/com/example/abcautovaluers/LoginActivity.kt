@@ -75,8 +75,11 @@ class LoginActivity : AppCompatActivity() {
 
                 if (password.isNotEmpty()){
 
+                    loginProgress.visibility = View.VISIBLE
+
                     val intent = Intent(this, LoginService::class.java)
                     intent.putExtra("email", email)
+                    intent.putExtra("checkState", checkBox.isChecked)
                     intent.putExtra("password", password)
                     intent.putExtra("receiver", resultReceiver)
                     startService(intent)
@@ -105,12 +108,23 @@ class LoginActivity : AppCompatActivity() {
                 RESPONSE_MEMBER_DOES_NOT_EXIST -> {
 
                     Snackbar.make(snackBar_cont, "There is no member registered with the email address entered! Please check the email address and try again", Snackbar.LENGTH_LONG).show()
+                    loginProgress.visibility = View.INVISIBLE
+
 
                 }
 
                 RESPONSE_PASSWORD_DOES_NOT_MATCH -> {
 
                     Snackbar.make(snackBar_cont, "Passwords do not match! Please check the password entered and try again", Snackbar.LENGTH_LONG).show()
+                    loginProgress.visibility = View.INVISIBLE
+
+                }
+
+                else -> {
+
+                    Snackbar.make(snackBar_cont, "There has been an expected error! Contact the site administrator", Snackbar.LENGTH_LONG).show()
+                    loginProgress.visibility = View.INVISIBLE
+
                 }
 
             }

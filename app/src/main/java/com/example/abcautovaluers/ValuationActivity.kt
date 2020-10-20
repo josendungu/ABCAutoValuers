@@ -22,7 +22,6 @@ class ValuationActivity : AppCompatActivity() {
     private val tag = "Valuation"
     private lateinit var photoFile: File
     private lateinit var valuationInstance: ValuationInstance
-    private var check = false
     private val takePicIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
     private var resultPresent: Boolean = false
@@ -32,10 +31,12 @@ class ValuationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_valuation)
 
         valuationInstance = ValuationInstance(this)
-        check = valuationInstance.checkValuation()
 
-        handleValuationPresent()
+        if (valuationInstance.checkValuation()){
 
+            handleValuationPresent()
+
+        }
 
 
         if (takePicIntent.resolveActivity(this.packageManager) != null) {
@@ -94,9 +95,9 @@ class ValuationActivity : AppCompatActivity() {
 
             if (plateNumber.isNotEmpty()){
 
-                valuationInstance.addValuationItem(ValuationInstance.KEY_PLATE_NO, plateNumber)
                 if (valuationInstanceCheck()){
 
+                    valuationInstance.addValuationItem(ValuationInstance.KEY_PLATE_NO, plateNumber)
                     val intent = Intent(this, SubmittingActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
@@ -130,21 +131,16 @@ class ValuationActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        if (check && !resultPresent) {
-
-            PopulateAlert(KEY_VALUATION_ALERT, this)
-
-        }
-
-        resultPresent = false
-    }
 
     private fun handleValuationPresent() {
 
         val valuationData = valuationInstance.valuationPresentState
+
+        if (valuationData[ValuationInstance.KEY_PLATE_NO] != null){
+
+            textPlateNumber.editText?.setText(valuationData[ValuationInstance.KEY_PLATE_NO])
+
+        }
 
         if (valuationData[ValuationInstance.KEY_LOG_BOOK] != null){
 
@@ -188,6 +184,12 @@ class ValuationActivity : AppCompatActivity() {
             updateAddedItem(pic_rear, add_rear, ic_rear)
 
         }
+
+        if (valuationData[ValuationInstance.KEY_REAR_LEFT] != null) {
+
+            updateAddedItem(pic_rear_left, add_rear_left, ic_rear_left)
+
+        }
         if (valuationData[ValuationInstance.KEY_REAR_RIGHT] != null) {
 
             updateAddedItem(pic_rear_right, add_rear_right, ic_rear_right)
@@ -195,7 +197,7 @@ class ValuationActivity : AppCompatActivity() {
         }
         if(valuationData[ValuationInstance.KEY_MILLAGE] != null) {
 
-            updateAddedItem(pic_rear_left, add_millage, ic_millage)
+            updateAddedItem(pic_millage, add_millage, ic_millage)
 
         }
         if (valuationData[ValuationInstance.KEY_HEAD_LIGHT] != null) {
@@ -228,7 +230,7 @@ class ValuationActivity : AppCompatActivity() {
 
     private fun valuationInstanceCheck(): Boolean {
 
-        val valuationData = valuationInstance.valuationData
+        val valuationData = valuationInstance.valuationPresentState
 
         when {
             valuationData[ValuationInstance.KEY_LOG_BOOK] == null -> {
@@ -389,7 +391,7 @@ class ValuationActivity : AppCompatActivity() {
 
     }
 
-    private fun handleResultResentProperty(){
+    private fun handleResultPresentProperty(){
 
         resultPresent = true
 
@@ -407,7 +409,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_log, add_log_book, ic_log)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
 
                 }
@@ -421,7 +423,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_kra, add_kra, ic_kra)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
 
                 }
@@ -435,7 +437,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_ID, add_id, ic_id)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
 
                 }
@@ -448,7 +450,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_instructions, add_instructions, ic_instructions)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
 
                 }
@@ -462,7 +464,7 @@ class ValuationActivity : AppCompatActivity() {
                     )
                     updateAddedItem(pic_front, add_front, ic_front)
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
                 }
@@ -475,7 +477,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_front_right, add_front_right, ic_front)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
@@ -489,7 +491,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_front_left, add_front_left, ic_front_left)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
@@ -503,7 +505,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_rear, add_rear, ic_rear)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
@@ -517,7 +519,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_rear_right, add_rear_right, ic_rear_right)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
@@ -531,7 +533,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_rear_left, add_rear_left, ic_rear_left)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
@@ -545,7 +547,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_millage, add_millage, ic_millage)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
@@ -559,7 +561,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_head_light, add_head_light, ic_head_light)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
@@ -573,7 +575,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_dashboard, add_dashboard, ic_dashboard)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
@@ -587,7 +589,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_radio, add_radio, ic_radio)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
@@ -601,7 +603,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_insurance, add_insurance, ic_insurance)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 
@@ -615,7 +617,7 @@ class ValuationActivity : AppCompatActivity() {
                         photoFile.absolutePath
                     )
                     updateAddedItem(pic_chassis, add_chassis, ic_chassis)
-                    handleResultResentProperty()
+                    handleResultPresentProperty()
                     Log.d(tag, "Intent in: ${photoFile.absolutePath}")
                     //val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
 

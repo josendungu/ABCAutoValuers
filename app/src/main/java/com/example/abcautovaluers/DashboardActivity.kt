@@ -11,6 +11,8 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class DashboardActivity : AppCompatActivity() {
 
+    private var email: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
@@ -18,19 +20,34 @@ class DashboardActivity : AppCompatActivity() {
         val userSession = SessionManager(this)
         val valuationInstance = ValuationInstance(this)
 
-        val email = userSession.userEmail
 
-        textMemberName.text = getString(R.string.welcome, email)
 
-        if (valuationInstance.checkValuation()){
+        email = if (userSession.checkSessionState()){
 
-            buttonNew.text = getString(R.string.proceed)
+            userSession.userEmail
+
+        } else {
+
+            intent.extras?.getString("email")
 
         }
 
+        textMemberName.text = getString(R.string.welcome, email)
+
+
+
         buttonNew.setOnClickListener {
 
-            startActivity(Intent(this, ValuationActivity::class.java))
+            if (valuationInstance.checkValuation()){
+
+                PopulateAlert(KEY_VALUATION_ALERT, this)
+
+            } else {
+
+                val intent = Intent(this, ValuationActivity::class.java)
+                startActivity(intent)
+
+            }
 
         }
 

@@ -21,6 +21,7 @@ class LoginService: IntentService("Login Service") {
         val email: String = p0?.extras?.get("email") as String
         val password: String = p0.extras?.get("password") as String
         resultReceiver = p0.extras?.get("receiver") as ResultReceiver
+        val checkState:Boolean = p0.extras?.get("checkState") as Boolean
 
         try {
 
@@ -42,10 +43,17 @@ class LoginService: IntentService("Login Service") {
             when (result) {
                 RESPONSE_LOGIN_PASSED.toString() -> {
 
-                    val sessionManager = SessionManager(this)
-                    sessionManager.addMember(email)
-
                     val intent = Intent(this, DashboardActivity::class.java)
+                    if (checkState){
+
+                        val sessionManager = SessionManager(this)
+                        sessionManager.addMember(email)
+
+                    } else {
+
+                        intent.putExtra("email",email)
+
+                    }
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
 

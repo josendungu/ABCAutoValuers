@@ -38,6 +38,8 @@ class PopulateAlert(
                 view.button_proceed.setOnClickListener {
 
                     dialog.cancel()
+                    val intent = Intent(activity, ValuationActivity::class.java)
+                    activity.startActivity(intent)
 
                 }
 
@@ -46,7 +48,6 @@ class PopulateAlert(
                     ValuationInstance(activity).clearInstance()
                     dialog.cancel()
                     val intent = Intent(activity, ValuationActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
 
                 }
@@ -106,6 +107,27 @@ class PopulateAlert(
                 dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
                 dialog.show()
 
+            }
+            KEY_ERROR_UPLOAD -> {
+
+                view = inflater.inflate(R.layout.alert, null)
+
+                alert.setView(view)
+                alert.setCancelable(false)
+                dialog = alert.create()
+
+
+                view.button_action.setOnClickListener {
+
+                    dialog.cancel()
+                    val intent = Intent(activity, ValuationActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    activity.startActivity(intent)
+
+                }
+
+                dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+                dialog.show()
             }
         }
     }
