@@ -33,7 +33,7 @@ public class DB_con {
     public String getConnection(){
         try {
 
-            String url1 = "http://192.168.137.1/abcautovaluers/login.php";
+            String url1 = "http://192.168.0.107/abcautovaluers/login.php";
             URL url = new URL(url1);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setReadTimeout(10000);

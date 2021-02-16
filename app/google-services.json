@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "399548784215",
+    "firebase_url": "https://abcautovaluers-322fe-default-rtdb.firebaseio.com",
+    "project_id": "abcautovaluers-322fe",
+    "storage_bucket": "abcautovaluers-322fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399548784215:android:289c4006ca7f293bb4cd12",
+        "android_client_info": {
+          "package_name": "com.example.abcautovaluers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399548784215-t1o00a9shcg3rsbq8njf841ftq6okusf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4lC5PdEiX0Dui0JcNp6hml41G7TK-FNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399548784215-t1o00a9shcg3rsbq8njf841ftq6okusf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

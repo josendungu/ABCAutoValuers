@@ -94,7 +94,6 @@ class SubmittingService : IntentService("SubmittingService") {
                                         .addOnSuccessListener {
 
                                             val gsonLog = Gson()
-
                                             val bundle1 = Bundle()
                                             bundle.putString(BUNDLE_IMAGES_UPLOADED, "Images have been uploaded")
                                             resultReceiver.send(IMAGES_UPLOADED, bundle1)

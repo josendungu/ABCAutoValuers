@@ -5,17 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
-import android.se.omapi.Session
+import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
-import androidx.appcompat.widget.ActionBarContainer
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.connection_state
+import kotlinx.android.synthetic.main.activity_submitting.*
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var email: String
+    private lateinit var username: String
     private lateinit var password: String
 
     private val handler = Handler()
@@ -61,28 +65,20 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        val resultReceiver =MyResultReceiver(handler)
-
         buttonSubmit.setOnClickListener {
 
-            et_email.error = null
+            et_username.error = null
             et_password.error = null
 
-            email = et_email.editText?.text.toString()
+            username = et_username.editText?.text.toString()
             password = et_password.editText?.text.toString()
 
-            if (email.isNotEmpty()){
+            if (username.isNotEmpty()){
 
                 if (password.isNotEmpty()){
 
                     loginProgress.visibility = View.VISIBLE
-
-                    val intent = Intent(this, LoginService::class.java)
-                    intent.putExtra("email", email)
-                    intent.putExtra("checkState", checkBox.isChecked)
-                    intent.putExtra("password", password)
-                    intent.putExtra("receiver", resultReceiver)
-                    startService(intent)
+                    checkLoginDetails()
 
                 } else {
 
@@ -91,43 +87,68 @@ class LoginActivity : AppCompatActivity() {
                 }
             } else {
 
-                et_email.error = "Field can not be empty."
+                et_username.error = "Field can not be empty."
 
             }
 
         }
     }
 
-    private inner class MyResultReceiver(handler: Handler?) : ResultReceiver(handler) {
+    private fun moveToDashboard(){
 
-        override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-            super.onReceiveResult(resultCode, resultData)
+        loginProgress.visibility = View.INVISIBLE
+        val intent = Intent(this, DashboardActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
 
-            when(resultCode){
+    }
 
-                RESPONSE_MEMBER_DOES_NOT_EXIST -> {
+    private fun validatePassword(user: User?){
 
-                    Snackbar.make(snackBar_cont, "There is no member registered with the email address entered! Please check the email address and try again", Snackbar.LENGTH_LONG).show()
-                    loginProgress.visibility = View.INVISIBLE
+        if(user?.password == password){
 
+            moveToDashboard()
 
-                }
+        } else {
 
-                RESPONSE_PASSWORD_DOES_NOT_MATCH -> {
+            et_password.error = "Passwords do not match"
+            loginProgress.visibility = View.INVISIBLE
 
-                    Snackbar.make(snackBar_cont, "Passwords do not match! Please check the password entered and try again", Snackbar.LENGTH_LONG).show()
-                    loginProgress.visibility = View.INVISIBLE
+        }
+    }
 
-                }
+    private fun checkLoginDetails() {
 
-                else -> {
+        val databaseRef = FirebaseUtil.openFirebaseReference("Users")
 
-                    Snackbar.make(snackBar_cont, "There has been an expected error! Contact the site administrator", Snackbar.LENGTH_LONG).show()
-                    loginProgress.visibility = View.INVISIBLE
+        databaseRef.child(username).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(p0: DataSnapshot) {
+
+                val user = p0.getValue(User::class.java)
+
+                validatePassword(user)
+
+                if (user !=  null){
+
+                    Log.d("Data", user.email)
+
+                } else {
+
+                    Log.d("Error", "error occurred: User is null")
 
                 }
 
             }
-        }
+
+            override fun onCancelled(p0: DatabaseError) {
+
+                Log.d("Error", "error occurred")
+
+            }
+
+        })
+
     }
 }
+
+
