@@ -80,6 +80,7 @@ class SubmittingActivity : AppCompatActivity() {
 
         val intent = Intent(this, SubmittingService::class.java)
         intent.putExtra("account", account)
+        intent.putExtra("username", SessionManager(this).username)
         intent.putExtra("data", valuationData)
         intent.putExtra("plate_no", valuationInstance.plateNumber)
         intent.putExtra("receiver", resultReceiver)
@@ -177,6 +178,7 @@ class SubmittingActivity : AppCompatActivity() {
                 ERROR_OCCURRED -> {
 
                     PopulateAlert(KEY_ERROR_UPLOAD, mContext as Activity)
+
                 }
 
             }

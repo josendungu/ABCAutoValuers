@@ -5,10 +5,10 @@ import android.content.SharedPreferences;
 
 public class SessionManager {
 
-    private SharedPreferences userSession;
-    private SharedPreferences.Editor editor;
+    private final SharedPreferences userSession;
+    private final SharedPreferences.Editor editor;
 
-    public static final String KEY_EMAIL = "email";
+    public static final String KEY_USERNAME = "username";
     public static final String KEY_SESSION_STATE = "state";
 
     public SessionManager(Context context){
@@ -18,10 +18,10 @@ public class SessionManager {
 
     }
 
-    public void addMember(String email){
+    public void addMember(String username, Boolean state){
 
-        editor.putString(KEY_EMAIL, email);
-        editor.putBoolean(KEY_SESSION_STATE, true);
+        editor.putString(KEY_USERNAME, username);
+        editor.putBoolean(KEY_SESSION_STATE, state);
         editor.commit();
 
     }
@@ -37,9 +37,9 @@ public class SessionManager {
         editor.clear().commit();
     }
 
-    public String getUserEmail(){
+    public String getUsername(){
 
-        return userSession.getString(KEY_EMAIL, null);
+        return userSession.getString(KEY_USERNAME, null);
 
     }
 

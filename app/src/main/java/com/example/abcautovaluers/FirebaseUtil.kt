@@ -1,7 +1,7 @@
 package com.example.abcautovaluers
 
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import android.util.Log
+import com.google.firebase.database.*
 
 class FirebaseUtil {
 
@@ -25,7 +25,6 @@ class FirebaseUtil {
 
         }
 
-        
     }
 
 

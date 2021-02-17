@@ -28,7 +28,7 @@ class LoginActivity : AppCompatActivity() {
         super.onStart()
 
         val sessionManager = SessionManager(this)
-        if (sessionManager.checkSessionState()){
+        if (sessionManager.checkSessionState()) {
 
             val intent = Intent(this, DashboardActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
         val networkConnection = NetworkConnection(applicationContext)
         networkConnection.observe(this, Observer {
 
-            if (it){
+            if (it) {
 
                 connection_state.visibility = View.VISIBLE
                 connection_state.text = getString(R.string.connected)
@@ -73,12 +73,12 @@ class LoginActivity : AppCompatActivity() {
             username = et_username.editText?.text.toString()
             password = et_password.editText?.text.toString()
 
-            if (username.isNotEmpty()){
+            if (username.isNotEmpty()) {
 
-                if (password.isNotEmpty()){
+                if (password.isNotEmpty()) {
 
                     loginProgress.visibility = View.VISIBLE
-                    checkLoginDetails()
+                    checkLoginDetails(username)
 
                 } else {
 
@@ -94,20 +94,22 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun moveToDashboard(){
+    private fun moveToDashboard(user: User?) {
 
         loginProgress.visibility = View.INVISIBLE
         val intent = Intent(this, DashboardActivity::class.java)
+        intent.putExtra(DashboardActivity.USER_REFERENCE, user)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
 
     }
 
-    private fun validatePassword(user: User?){
+    private fun validatePassword(user: User?) {
 
-        if(user?.password == password){
+        if (user?.password == password) {
 
-            moveToDashboard()
+            handleSessionRegistration()
+            moveToDashboard(user)
 
         } else {
 
@@ -117,38 +119,61 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkLoginDetails() {
+    private fun handleSessionRegistration() {
+
+        if (checkBox.isChecked) {
+
+            SessionManager(this).addMember(username, true)
+
+        } else {
+
+            SessionManager(this).addMember(username, false)
+        }
+
+    }
+
+
+    private fun checkLoginDetails(username: String?) {
 
         val databaseRef = FirebaseUtil.openFirebaseReference("Users")
 
-        databaseRef.child(username).addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(p0: DataSnapshot) {
+        var user: User? = null
 
-                val user = p0.getValue(User::class.java)
+        if (username != null) {
+            databaseRef.child(username).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot) {
 
-                validatePassword(user)
+                    user = p0.getValue(User::class.java)
 
-                if (user !=  null){
+                    if (user != null){
 
-                    Log.d("Data", user.email)
+                        validatePassword(user)
 
-                } else {
+                    } else {
 
-                    Log.d("Error", "error occurred: User is null")
+                        //TODO:  Handle error
+
+                    }
 
                 }
 
-            }
+                override fun onCancelled(p0: DatabaseError) {
 
-            override fun onCancelled(p0: DatabaseError) {
+                    Log.d("Error", "error occurred")
 
-                Log.d("Error", "error occurred")
+                }
 
-            }
+            })
+        }
 
-        })
+
+
+
 
     }
+
+
 }
+
 
 

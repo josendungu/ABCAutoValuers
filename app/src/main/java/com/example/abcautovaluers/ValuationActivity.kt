@@ -32,12 +32,11 @@ class ValuationActivity : AppCompatActivity() {
 
         valuationInstance = ValuationInstance(this)
 
-        if (valuationInstance.checkValuation()){
+        if (valuationInstance.checkValuation()) {
 
             handleValuationPresent()
 
         }
-
 
         if (takePicIntent.resolveActivity(this.packageManager) != null) {
 
@@ -89,6 +88,7 @@ class ValuationActivity : AppCompatActivity() {
 
         }
 
+
         buttonSubmit.setOnClickListener {
 
             val plateNumber = textPlateNumber.editText?.text.toString()
@@ -117,9 +117,9 @@ class ValuationActivity : AppCompatActivity() {
 
     }
 
-    private fun handleErrorDisplay(state: Int = 0){
+    private fun handleErrorDisplay(state: Int = 0) {
 
-        if (state == 1){
+        if (state == 1) {
 
             text_error.visibility = View.VISIBLE
 
@@ -136,19 +136,19 @@ class ValuationActivity : AppCompatActivity() {
 
         val valuationData = valuationInstance.valuationPresentState
 
-        if (valuationData[ValuationInstance.KEY_PLATE_NO] != null){
+        if (valuationData[ValuationInstance.KEY_PLATE_NO] != null) {
 
             textPlateNumber.editText?.setText(valuationData[ValuationInstance.KEY_PLATE_NO])
 
         }
 
-        if (valuationData[ValuationInstance.KEY_LOG_BOOK] != null){
+        if (valuationData[ValuationInstance.KEY_LOG_BOOK] != null) {
 
             updateAddedItem(pic_log, add_log_book, ic_log)
 
         }
 
-        if (valuationData[ValuationInstance.KEY_KRA] != null){
+        if (valuationData[ValuationInstance.KEY_KRA] != null) {
 
             updateAddedItem(pic_kra, add_kra, ic_kra)
 
@@ -195,7 +195,7 @@ class ValuationActivity : AppCompatActivity() {
             updateAddedItem(pic_rear_right, add_rear_right, ic_rear_right)
 
         }
-        if(valuationData[ValuationInstance.KEY_MILLAGE] != null) {
+        if (valuationData[ValuationInstance.KEY_MILLAGE] != null) {
 
             updateAddedItem(pic_millage, add_millage, ic_millage)
 
@@ -205,7 +205,7 @@ class ValuationActivity : AppCompatActivity() {
             updateAddedItem(pic_head_light, add_head_light, ic_head_light)
 
         }
-        if(valuationData[ValuationInstance.KEY_DASHBOARD] != null) {
+        if (valuationData[ValuationInstance.KEY_DASHBOARD] != null) {
 
             updateAddedItem(pic_dashboard, add_dashboard, ic_dashboard)
 
@@ -220,7 +220,7 @@ class ValuationActivity : AppCompatActivity() {
             updateAddedItem(pic_insurance, add_insurance, ic_insurance)
 
         }
-        if(valuationData[ValuationInstance.KEY_CHASSIS] != null) {
+        if (valuationData[ValuationInstance.KEY_CHASSIS] != null) {
 
             updateAddedItem(pic_chassis, add_chassis, ic_chassis)
 
@@ -257,7 +257,8 @@ class ValuationActivity : AppCompatActivity() {
             valuationData[ValuationInstance.KEY_INSTRUCTIONS] == null -> {
 
                 handleErrorDisplay(1)
-                text_error.text = getString(R.string.error_message, ValuationInstance.KEY_INSTRUCTIONS)
+                text_error.text =
+                    getString(R.string.error_message, ValuationInstance.KEY_INSTRUCTIONS)
                 return false
 
             }
@@ -271,14 +272,16 @@ class ValuationActivity : AppCompatActivity() {
             valuationData[ValuationInstance.KEY_FRONT_RIGHT] == null -> {
 
                 handleErrorDisplay(1)
-                text_error.text = getString(R.string.error_message, ValuationInstance.KEY_FRONT_RIGHT)
+                text_error.text =
+                    getString(R.string.error_message, ValuationInstance.KEY_FRONT_RIGHT)
                 return false
 
             }
             valuationData[ValuationInstance.KEY_FRONT_LEFT] == null -> {
 
                 handleErrorDisplay(1)
-                text_error.text = getString(R.string.error_message, ValuationInstance.KEY_FRONT_LEFT)
+                text_error.text =
+                    getString(R.string.error_message, ValuationInstance.KEY_FRONT_LEFT)
                 return false
 
             }
@@ -292,7 +295,8 @@ class ValuationActivity : AppCompatActivity() {
             valuationData[ValuationInstance.KEY_REAR_RIGHT] == null -> {
 
                 handleErrorDisplay(1)
-                text_error.text = getString(R.string.error_message, ValuationInstance.KEY_REAR_RIGHT)
+                text_error.text =
+                    getString(R.string.error_message, ValuationInstance.KEY_REAR_RIGHT)
                 return false
 
             }
@@ -306,7 +310,8 @@ class ValuationActivity : AppCompatActivity() {
             valuationData[ValuationInstance.KEY_HEAD_LIGHT] == null -> {
 
                 handleErrorDisplay(1)
-                text_error.text = getString(R.string.error_message, ValuationInstance.KEY_HEAD_LIGHT)
+                text_error.text =
+                    getString(R.string.error_message, ValuationInstance.KEY_HEAD_LIGHT)
                 return false
 
             }
@@ -348,10 +353,16 @@ class ValuationActivity : AppCompatActivity() {
 
     }
 
-    private fun updateAddedItem(relLayoutOutline: View, relLayoutBackground: View, imageView: ImageView){
+    private fun updateAddedItem(
+        relLayoutOutline: View,
+        relLayoutBackground: View,
+        imageView: ImageView
+    ) {
 
-        relLayoutOutline.background = ContextCompat.getDrawable(this, R.drawable.pic_item_background_added)
-        relLayoutBackground.background = ContextCompat.getDrawable(this, R.drawable.circular_background_added)
+        relLayoutOutline.background =
+            ContextCompat.getDrawable(this, R.drawable.pic_item_background_added)
+        relLayoutBackground.background =
+            ContextCompat.getDrawable(this, R.drawable.circular_background_added)
         imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_added))
 
     }
@@ -391,7 +402,7 @@ class ValuationActivity : AppCompatActivity() {
 
     }
 
-    private fun handleResultPresentProperty(){
+    private fun handleResultPresentProperty() {
 
         resultPresent = true
 
