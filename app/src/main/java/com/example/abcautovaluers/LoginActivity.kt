@@ -30,7 +30,10 @@ class LoginActivity : AppCompatActivity() {
         val sessionManager = SessionManager(this)
         if (sessionManager.checkSessionState()) {
 
+            val user = sessionManager.userDetails
+
             val intent = Intent(this, DashboardActivity::class.java)
+            intent.putExtra(DashboardActivity.USER_REFERENCE, user)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
 
@@ -108,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
 
         if (user?.password == password) {
 
-            handleSessionRegistration()
+            handleSessionRegistration(user)
             moveToDashboard(user)
 
         } else {
@@ -119,16 +122,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleSessionRegistration() {
+    private fun handleSessionRegistration(user: User?) {
 
-        if (checkBox.isChecked) {
-
-            SessionManager(this).addMember(username, true)
-
-        } else {
-
-            SessionManager(this).addMember(username, false)
-        }
+        SessionManager(this).addMember(user, checkBox.isChecked)
 
     }
 

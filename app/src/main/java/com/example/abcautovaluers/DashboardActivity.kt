@@ -12,6 +12,8 @@ import kotlinx.android.synthetic.main.activity_dashboard.*
 
 class DashboardActivity : AppCompatActivity() {
 
+    private lateinit var mUser: User
+
     companion object{
         const val USER_REFERENCE = "user_reference"
     }
@@ -23,18 +25,18 @@ class DashboardActivity : AppCompatActivity() {
         val userSession = SessionManager(this)
         val valuationInstance = ValuationInstance(this)
 
-        if (userSession.checkSessionState()){
+        if (userSession.checkLoginState()){
 
-            val username: String = userSession.username
-            fetchUserDetails(username)
+            mUser = userSession.userDetails
 
         } else {
 
-            val user = intent.getParcelableExtra(USER_REFERENCE) as User
-            loadActivity(user)
+            mUser = intent.getParcelableExtra(USER_REFERENCE) as User
+            userSession.setLoggedState(true)
 
         }
 
+        textMemberName.text = getString(R.string.welcome, mUser.email)
 
         buttonNew.setOnClickListener {
 
@@ -51,6 +53,13 @@ class DashboardActivity : AppCompatActivity() {
 
         }
 
+        buttonNewUser.setOnClickListener {
+
+            val intent = Intent(this, UserViewActivity::class.java)
+            startActivity(intent)
+
+        }
+
         buttonLogout.setOnClickListener {
 
             userSession.logoutUser()
@@ -61,38 +70,5 @@ class DashboardActivity : AppCompatActivity() {
         }
 
     }
-
-    private fun loadActivity(user: User){
-
-        textMemberName.text = getString(R.string.welcome, user.email)
-
-    }
-
-    private fun fetchUserDetails(username: String?) {
-
-        val databaseRef = FirebaseUtil.openFirebaseReference("Users")
-
-        var user: User? = null
-
-        if (username != null) {
-            databaseRef.child(username).addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(p0: DataSnapshot) {
-
-                    user = p0.getValue(User::class.java)
-                    user?.let { loadActivity(it) }
-
-                }
-
-                override fun onCancelled(p0: DatabaseError) {
-
-                    Log.d("Error", "error occurred")
-
-                }
-
-            })
-        }
-    }
-
-
 
 }

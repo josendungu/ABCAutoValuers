@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">ABCAutoValuers</string>
     <string name="login_text_statement">Login into your account</string>
-    <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">LOGIN</string>
     <string name="remember_me">Remember me</string>
@@ -60,4 +59,11 @@
     <string name="valuate">Valuate</string>
     <string name="proceed_only">Proceed</string>
     <string name="username">Username</string>
+    <string name="add_user">Add user</string>
+    <string name="email">Email</string>
+    <string name="is_admin">Is admin</string>
+    <string name="register">Register</string>
+    <string name="user_was_successfully_added">User was successfully added</string>
+    <string name="user_upload_error_statement">There was an error uploading the user details. Please try again.</string>
+    <string name="add_new_user">Add User</string>
 </resources>

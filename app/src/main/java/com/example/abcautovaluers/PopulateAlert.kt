@@ -56,6 +56,38 @@ class PopulateAlert(
                 dialog.show()
 
             }
+            KEY_USER_ADD_FAILURE -> {
+
+                view = inflater.inflate(R.layout.alert_user_add_error, null)
+                alert.setView(view)
+                alert.setCancelable(false)
+                dialog = alert.create()
+
+                view.button_action.setOnClickListener {
+
+                    dialog.cancel()
+                    val intent = Intent(activity, DashboardActivity::class.java)
+                    activity.startActivity(intent)
+
+                }
+
+            }
+            KEY_USER_ADDED -> {
+
+                view = inflater.inflate(R.layout.alert_user_added_success, null)
+                alert.setView(view)
+                alert.setCancelable(false)
+                dialog = alert.create()
+
+                view.button_action.setOnClickListener {
+
+                    dialog.cancel()
+                    val intent = Intent(activity, DashboardActivity::class.java)
+                    activity.startActivity(intent)
+
+                }
+
+            }
             KEY_BACK_PRESSED_ALERT -> {
 
                 view = inflater.inflate(R.layout.back_pressed_alert, null)
@@ -101,7 +133,7 @@ class PopulateAlert(
                     val intent = Intent(activity, DashboardActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
-                    ValuationInstance(activity).clearInstance()
+                    //ValuationInstance(activity).clearInstance()
 
                 }
 

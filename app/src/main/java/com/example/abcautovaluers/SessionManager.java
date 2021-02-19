@@ -9,6 +9,9 @@ public class SessionManager {
     private final SharedPreferences.Editor editor;
 
     public static final String KEY_USERNAME = "username";
+    public static final String KEY_LOGGED_STATE = "logged_state";
+    public static final String KEY_PASSWORD = "password";
+    public static final String KEY_EMAIL = "email";
     public static final String KEY_SESSION_STATE = "state";
 
     public SessionManager(Context context){
@@ -18,11 +21,23 @@ public class SessionManager {
 
     }
 
-    public void addMember(String username, Boolean state){
+    public void addMember(User user, Boolean state){
 
-        editor.putString(KEY_USERNAME, username);
+        editor.putString(KEY_USERNAME, user.getUsername());
+        editor.putString(KEY_EMAIL, user.getEmail());
+        editor.putString(KEY_PASSWORD, user.getPassword());
         editor.putBoolean(KEY_SESSION_STATE, state);
         editor.commit();
+
+    }
+
+    public User getUserDetails(){
+
+        String username = userSession.getString(KEY_USERNAME, null);
+        String password = userSession.getString(KEY_PASSWORD, null);
+        String email = userSession.getString(KEY_EMAIL, null);
+
+        return new User(username, password, email);
 
     }
 
@@ -32,9 +47,20 @@ public class SessionManager {
 
     }
 
+    public void setLoggedState(Boolean state){
+
+        editor.putBoolean(KEY_LOGGED_STATE, state);
+
+    }
+
     public void logoutUser(){
 
         editor.clear().commit();
+    }
+
+    public boolean checkLoginState(){
+
+        return userSession.getBoolean(KEY_LOGGED_STATE, false);
     }
 
     public String getUsername(){

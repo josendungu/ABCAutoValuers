@@ -3,28 +3,28 @@
     package="com.example.abcautovaluers">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".UserViewActivity"></activity>
+
         <provider
-            android:authorities="com.example.abcautovaluers.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.abcautovaluers.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/fileprovider"/>
+                android:resource="@xml/fileprovider" />
         </provider>
 
         <activity android:name=".SubmittingActivity" />
@@ -38,8 +38,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".SubmittingService"/>
-        <service android:name=".LoginService"/>
+        <service android:name=".SubmittingService" />
+        <service android:name=".LoginService" />
     </application>
 
 </manifest>
