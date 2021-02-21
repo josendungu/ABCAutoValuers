@@ -33,6 +33,7 @@ const val KEY_ERROR_UPLOAD = 2
 const val KEY_SUCCESS_IMAGES = 3
 const val KEY_USER_ADDED = 5
 const val KEY_USER_ADD_FAILURE = 6
+const val KEY_ADDING_USER = 7
 
 const val RESPONSE_LOGIN_PASSED = 201
 const val RESPONSE_MEMBER_DOES_NOT_EXIST = 202

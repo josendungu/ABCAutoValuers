@@ -1,5 +1,6 @@
 package com.example.abcautovaluers
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -37,7 +38,7 @@ class UserViewActivity : AppCompatActivity() {
 
             if (validateUser() && validatePassword() && validateEmail()){
 
-                addUser()
+                validateUsername()
 
             } else {
 
@@ -51,9 +52,7 @@ class UserViewActivity : AppCompatActivity() {
 
     }
 
-    private fun addUser() {
-
-        val user = User(mUsername, mPassword, mEmail)
+    private fun validateUsername() {
 
         val reference = FirebaseUtil.openFirebaseReference("Users").orderByChild("username").equalTo(mUsername)
 
@@ -62,23 +61,12 @@ class UserViewActivity : AppCompatActivity() {
 
                 if (!p0.exists()){
 
-                    val addReference = FirebaseUtil.openFirebaseReference("Users")
+                    addUser()
 
-                    addReference.setValue(user)
-                        .addOnFailureListener {
-
-                            PopulateAlert(KEY_USER_ADD_FAILURE, this@UserViewActivity)
-
-                        }
-                        .addOnSuccessListener {
-
-                            PopulateAlert(KEY_USER_ADDED, this@UserViewActivity)
-
-                        }
 
                 } else {
 
-                    PopulateAlert(KEY_USER_ADD_FAILURE, this@UserViewActivity)
+                    et_username.error = "Username is already taken. Enter another one and try again"
 
                 }
 
@@ -94,10 +82,34 @@ class UserViewActivity : AppCompatActivity() {
 
     }
 
+    private fun addUser() {
+
+        val user = User(mUsername, mPassword, mEmail)
+        val addReference = FirebaseUtil.openFirebaseReference("Users/$mUsername")
+        PopulateAlert(KEY_ADDING_USER, this@UserViewActivity)
+        addReference.setValue(user)
+
+            .addOnSuccessListener {
+
+                Log.d("User Add","added")
+                val intent = Intent(this@UserViewActivity, DashboardActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.putExtra(DashboardActivity.USER_ADDED, true)
+                startActivity(intent)
+
+            }
+            .addOnFailureListener {
+
+                Log.d("Add User Exception", it.toString())
+                PopulateAlert(KEY_USER_ADD_FAILURE, this@UserViewActivity)
+
+            }
+    }
+
     private fun validateEmail(): Boolean {
 
         val validate = Validate(mEmail, et_email)
-        val state = !validate.stringEmpty() && validate.doesNotContainsSpecialCharacter()
+        val state = !validate.stringEmpty() && validate.validateEmail()
         Log.d("New User Email", state.toString())
         return state
 
@@ -106,7 +118,7 @@ class UserViewActivity : AppCompatActivity() {
     private fun validateUser(): Boolean {
 
         val validate = Validate(mUsername, et_username)
-        val state = !validate.stringEmpty() && validate.doesNotContainsSpecialCharacter() && validate.fourCharacters() && validate.noWhiteSpaces()
+        val state = !validate.stringEmpty() && validate.doesNotContainsSpecialCharacter() && validate.fourCharacters()
         Log.d("New User User", state.toString())
         return state
 
@@ -115,7 +127,7 @@ class UserViewActivity : AppCompatActivity() {
     private fun validatePassword(): Boolean{
 
         val validate = Validate(mPassword, et_password)
-        val state = !validate.stringEmpty() && validate.noWhiteSpaces() && validate.containsDigit()
+        val state = !validate.stringEmpty() && validate.containsDigit()
         Log.d("New User Password", state.toString())
         return state
 

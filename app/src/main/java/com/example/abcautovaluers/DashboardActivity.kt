@@ -2,11 +2,8 @@ package com.example.abcautovaluers
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 
@@ -16,6 +13,7 @@ class DashboardActivity : AppCompatActivity() {
 
     companion object{
         const val USER_REFERENCE = "user_reference"
+        const val USER_ADDED = "user_added"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +22,8 @@ class DashboardActivity : AppCompatActivity() {
 
         val userSession = SessionManager(this)
         val valuationInstance = ValuationInstance(this)
+
+        checkUserAdded()
 
         if (userSession.checkLoginState()){
 
@@ -66,6 +66,18 @@ class DashboardActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+
+        }
+
+    }
+
+    private fun checkUserAdded() {
+
+        val userAdded = intent.extras?.get(USER_ADDED) as Boolean
+
+        if (userAdded){
+
+            Snackbar.make(snackViewCont, "User was successfully added", Snackbar.LENGTH_LONG).show()
 
         }
 

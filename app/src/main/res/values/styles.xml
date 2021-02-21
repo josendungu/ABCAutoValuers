@@ -11,10 +11,10 @@
         <item name="android:textColorHint">@color/colorBlack</item>
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="boxStrokeWidthFocused">1.5dp</item>
-        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="boxStrokeColor">@color/colorBlack</item>
         <item name="android:textColor">@color/colorBlack</item>
-        <item name="hintTextColor">@color/colorPrimary</item>
-        <item name="boxStrokeErrorColor">@color/colorPrimary</item>
+        <item name="hintTextColor">@color/colorGrey</item>
+        <item name="boxStrokeErrorColor">@color/colorBlack</item>
     </style>
 
     <style name="HintText">
@@ -37,7 +37,7 @@
         <item name="fontFamily">@font/montserrat_bold</item>
         <item name="textAllCaps">true</item>
         <item name="android:textSize">15sp</item>
-        <item name="color">@color/colorBlack</item>
+        <item name="color">@color/colorPrimary</item>
 
     </style>
 

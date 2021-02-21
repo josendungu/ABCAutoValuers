@@ -170,6 +170,21 @@ class Validate(private val value: String, private val editText: TextInputLayout)
 
     }
 
+    fun validateEmail(): Boolean{
+
+        val state = value.contains(emailPattern)
+        Log.d(tag, "email state ${value.contains(phoneNumberPattern).toString()}")
+
+
+        return if (state){
+            state
+        } else {
+            editText.error = "Invalid email!"
+            false
+        }
+
+    }
+
     fun validateNumberOfNames(): Boolean {
 
         val delimiter = " "

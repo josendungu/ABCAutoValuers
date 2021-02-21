@@ -34,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
             val intent = Intent(this, DashboardActivity::class.java)
             intent.putExtra(DashboardActivity.USER_REFERENCE, user)
+            intent.putExtra(DashboardActivity.USER_ADDED, false)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
 
@@ -102,6 +103,7 @@ class LoginActivity : AppCompatActivity() {
         loginProgress.visibility = View.INVISIBLE
         val intent = Intent(this, DashboardActivity::class.java)
         intent.putExtra(DashboardActivity.USER_REFERENCE, user)
+        intent.putExtra(DashboardActivity.USER_ADDED, false)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
 

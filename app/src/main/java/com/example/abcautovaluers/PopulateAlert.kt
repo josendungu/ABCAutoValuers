@@ -72,20 +72,12 @@ class PopulateAlert(
                 }
 
             }
-            KEY_USER_ADDED -> {
+            KEY_ADDING_USER -> {
 
-                view = inflater.inflate(R.layout.alert_user_added_success, null)
+                view = inflater.inflate(R.layout.alert_adding_user, null)
                 alert.setView(view)
                 alert.setCancelable(false)
                 dialog = alert.create()
-
-                view.button_action.setOnClickListener {
-
-                    dialog.cancel()
-                    val intent = Intent(activity, DashboardActivity::class.java)
-                    activity.startActivity(intent)
-
-                }
 
             }
             KEY_BACK_PRESSED_ALERT -> {
@@ -99,6 +91,7 @@ class PopulateAlert(
 
                     dialog.cancel()
                     val intent = Intent(activity, DashboardActivity::class.java)
+                    intent.putExtra(DashboardActivity.USER_ADDED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
 
@@ -109,6 +102,7 @@ class PopulateAlert(
                     ValuationInstance(activity).clearInstance()
                     dialog.cancel()
                     val intent = Intent(activity, DashboardActivity::class.java)
+                    intent.putExtra(DashboardActivity.USER_ADDED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
 
@@ -131,6 +125,7 @@ class PopulateAlert(
 
                     dialog.cancel()
                     val intent = Intent(activity, DashboardActivity::class.java)
+                    intent.putExtra(DashboardActivity.USER_ADDED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
                     //ValuationInstance(activity).clearInstance()
