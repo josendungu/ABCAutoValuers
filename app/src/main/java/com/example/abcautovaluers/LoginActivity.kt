@@ -4,14 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.ResultReceiver
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.connection_state
@@ -141,23 +138,35 @@ class LoginActivity : AppCompatActivity() {
             databaseRef.child(username).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
 
-                    user = p0.getValue(User::class.java)
+                    if (p0.exists()){
 
-                    if (user != null){
+                        user = p0.getValue(User::class.java)
 
-                        validatePassword(user)
+                        if (user != null){
+
+                            validatePassword(user)
+                            Log.d("Is user admin", user!!.admin.toString())
+
+                        } else {
+
+                            loginProgress.visibility = View.INVISIBLE
+                            PopulateAlert(KEY_ERROR, this@LoginActivity)
+
+                        }
 
                     } else {
 
-                        //TODO:  Handle error
+                        et_username.error =  "User does not exist"
+                        loginProgress.visibility = View.INVISIBLE
 
                     }
+
 
                 }
 
                 override fun onCancelled(p0: DatabaseError) {
 
-                    Log.d("Error", "error occurred")
+                    PopulateAlert(KEY_ERROR, this@LoginActivity)
 
                 }
 

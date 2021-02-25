@@ -11,6 +11,7 @@ public class SessionManager {
     public static final String KEY_USERNAME = "username";
     public static final String KEY_LOGGED_STATE = "logged_state";
     public static final String KEY_PASSWORD = "password";
+    public static final String KEY_IS_ADMIN = "is_admin";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_SESSION_STATE = "state";
 
@@ -26,6 +27,7 @@ public class SessionManager {
         editor.putString(KEY_USERNAME, user.getUsername());
         editor.putString(KEY_EMAIL, user.getEmail());
         editor.putString(KEY_PASSWORD, user.getPassword());
+        editor.putBoolean(KEY_IS_ADMIN, user.getAdmin());
         editor.putBoolean(KEY_SESSION_STATE, state);
         editor.commit();
 
@@ -36,8 +38,9 @@ public class SessionManager {
         String username = userSession.getString(KEY_USERNAME, null);
         String password = userSession.getString(KEY_PASSWORD, null);
         String email = userSession.getString(KEY_EMAIL, null);
+        Boolean isAdmin = userSession.getBoolean(KEY_IS_ADMIN, false);
 
-        return new User(username, password, email);
+        return new User(username, password, email, isAdmin);
 
     }
 
@@ -50,6 +53,7 @@ public class SessionManager {
     public void setLoggedState(Boolean state){
 
         editor.putBoolean(KEY_LOGGED_STATE, state);
+        editor.commit();
 
     }
 

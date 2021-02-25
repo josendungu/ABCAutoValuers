@@ -56,6 +56,20 @@ class PopulateAlert(
                 dialog.show()
 
             }
+            KEY_ERROR -> {
+
+                view = inflater.inflate(R.layout.alert_error, null)
+                alert.setView(view)
+                alert.setCancelable(false)
+                dialog = alert.create()
+
+                view.button_action.setOnClickListener {
+
+                    dialog.cancel()
+
+                }
+
+            }
             KEY_USER_ADD_FAILURE -> {
 
                 view = inflater.inflate(R.layout.alert_user_add_error, null)
@@ -128,7 +142,7 @@ class PopulateAlert(
                     intent.putExtra(DashboardActivity.USER_ADDED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
-                    //ValuationInstance(activity).clearInstance()
+                    ValuationInstance(activity).clearInstance()
 
                 }
 

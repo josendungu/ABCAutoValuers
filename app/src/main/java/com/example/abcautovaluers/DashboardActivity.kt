@@ -2,6 +2,7 @@ package com.example.abcautovaluers
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_dashboard.*
@@ -25,18 +26,25 @@ class DashboardActivity : AppCompatActivity() {
 
         checkUserAdded()
 
-        if (userSession.checkLoginState()){
+        mUser = if (userSession.checkLoginState()){
 
-            mUser = userSession.userDetails
+            userSession.userDetails
 
         } else {
 
-            mUser = intent.getParcelableExtra(USER_REFERENCE) as User
-            userSession.setLoggedState(true)
+            intent.getParcelableExtra(USER_REFERENCE) as User
 
         }
 
-        textMemberName.text = getString(R.string.welcome, mUser.email)
+        userSession.setLoggedState(true)
+
+        if (!mUser.admin!!){
+
+            buttonNewUser.visibility = View.INVISIBLE
+
+        }
+
+        textMemberName.text = getString(R.string.welcome, mUser.username)
 
         buttonNew.setOnClickListener {
 

@@ -84,7 +84,7 @@ class UserViewActivity : AppCompatActivity() {
 
     private fun addUser() {
 
-        val user = User(mUsername, mPassword, mEmail)
+        val user = User(mUsername, mPassword, mEmail, mIsAdmin)
         val addReference = FirebaseUtil.openFirebaseReference("Users/$mUsername")
         PopulateAlert(KEY_ADDING_USER, this@UserViewActivity)
         addReference.setValue(user)
