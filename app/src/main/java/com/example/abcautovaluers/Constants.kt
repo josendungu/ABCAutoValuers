@@ -28,6 +28,7 @@ const val BUNDLE_PASSWORD_DO_NOT_MATCH = "passwords_do_not_match"
 const val BUNDLE_MEMBER_DOES_NOT_EXIST = "member_does_not_exist"
 const val BUNDLE_ERROR = "error"
 const val BUNDLE_FOLDER_EXISTS = "exists"
+const val BUNDLE_FOLDER_ID = "folder_id"
 
 const val KEY_VALUATION_ALERT = 1
 const val KEY_BACK_PRESSED_ALERT = 4

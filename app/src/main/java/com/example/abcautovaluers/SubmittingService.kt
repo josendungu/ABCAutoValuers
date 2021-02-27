@@ -25,14 +25,14 @@ class SubmittingService : IntentService("SubmittingService") {
     private lateinit var valuationData: HashMap<String, File>
 
     private lateinit var plateNumber: String
-    private lateinit var username: String
+    private lateinit var folderId: String
     private lateinit var resultReceiver: ResultReceiver
 
     override fun onHandleIntent(p0: Intent?) {
 
         val account: GoogleSignInAccount = p0?.extras?.get("account") as GoogleSignInAccount
         resultReceiver = p0.extras?.get("receiver") as ResultReceiver
-        username = p0.extras?.get("username") as String
+        folderId = p0.extras?.get("folderId") as String
         valuationData = p0.extras?.getSerializable("data") as HashMap<String, File>
         plateNumber = p0.extras?.get("plate_no") as String;
 
@@ -65,71 +65,53 @@ class SubmittingService : IntentService("SubmittingService") {
         val formatter = SimpleDateFormat.getDateTimeInstance() //or use getDateInstance()
         val formattedDate = formatter.format(date)
         val specificFolder = "$plateNumber/$formattedDate"
-        Log.d("Submitting Service", username)
+        Log.d("Submitting Folder", folderId)
 
-        mDriveServiceHelper.searchFolder(username)
-            .addOnSuccessListener {
+        mDriveServiceHelper.createFolder(specificFolder, folderId)
 
-                if (it.id == null) {
+            .addOnSuccessListener { specificFolderCreated ->
 
-                    sendFailure()
-                    Log.d("Submitting Service", "Didnt get the id")
+                val bundle = Bundle()
+                bundle.putString(
+                    BUNDLE_FOLDER_CREATED,
+                    "Appropriate folders have been created"
+                )
+                resultReceiver.send(FOLDER_CREATED, bundle)
 
-                } else {
+                Log.d("Submitting Service", "Folder created")
 
-                    mDriveServiceHelper.createFolder(specificFolder, it.id)
-                        .addOnSuccessListener { specificFolderCreated ->
+                mDriveServiceHelper.uploadImages(
+                    valuationData,
+                    specificFolderCreated.id
+                )
+                    .addOnSuccessListener {
 
-                            val bundle = Bundle()
-                            bundle.putString(
-                                BUNDLE_FOLDER_CREATED,
-                                "Appropriate folders have been created"
-                            )
-                            resultReceiver.send(FOLDER_CREATED, bundle)
+                        val bundle1 = Bundle()
+                        bundle1.putString(
+                            BUNDLE_IMAGES_UPLOADED,
+                            "Images have been uploaded"
+                        )
+                        resultReceiver.send(IMAGES_UPLOADED, bundle1)
 
-                            mDriveServiceHelper.uploadImages(
-                                valuationData,
-                                specificFolderCreated.id
-                            )
-                                .addOnSuccessListener {
+                    }
+                    .addOnFailureListener { exceptionImages ->
 
-                                    val gsonLog = Gson()
-                                    val bundle1 = Bundle()
-                                    bundle1.putString(
-                                        BUNDLE_IMAGES_UPLOADED,
-                                        "Images have been uploaded"
-                                    )
-                                    resultReceiver.send(IMAGES_UPLOADED, bundle1)
+                        val bundleErrorImages = Bundle()
+                        bundleErrorImages.putString(
+                            BUNDLE_FOLDER_CREATED,
+                            "Error: ${exceptionImages.toString()}"
+                        )
+                        resultReceiver.send(ERROR_OCCURRED, bundleErrorImages)
 
-                                }
-                                .addOnFailureListener { exceptionImages ->
-
-                                    val bundleErrorImages = Bundle()
-                                    bundleErrorImages.putString(
-                                        BUNDLE_FOLDER_CREATED,
-                                        "Error: ${exceptionImages.toString()}"
-                                    )
-                                    resultReceiver.send(ERROR_OCCURRED, bundleErrorImages)
-
-                                }
-                        }
-
-                        .addOnFailureListener {
-                            Log.d("Submitting Service", "folder not created")
-                            sendFailure()
-                        }
-
-                    Log.d("Submitting Service", it.id)
-
-                }
+                    }
             }
             .addOnFailureListener {
-                Log.d("Submitting Service", "Search exception: ${it.toString()}")
-
+                Log.d("Submitting Service", "folder not created")
                 sendFailure()
             }
 
     }
+
 
     private fun sendFailure() {
 

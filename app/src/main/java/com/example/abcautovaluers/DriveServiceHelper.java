@@ -218,21 +218,26 @@ public class DriveServiceHelper {
 
                 for (java.util.Map.Entry<String, java.io.File> stringFileEntry : valuationData.entrySet()) {
 
-                    String name = stringFileEntry.getKey();
-                    java.io.File file = stringFileEntry.getValue();
-                    File metadata = new File()
-                            .setParents(root)
-                            .setName(name);
+                    if (stringFileEntry != null){
 
-                    FileContent fileContent = new FileContent("image/jpeg", file);
+                        String name = stringFileEntry.getKey();
+                        java.io.File file = stringFileEntry.getValue();
+                        File metadata = new File()
+                                .setParents(root)
+                                .setName(name);
 
-                    File fileMeta = mDriveService.files().create(metadata, fileContent).setFields("id").execute();
-                    GoogleDriveFileHolder googleDriveFileHolder = new GoogleDriveFileHolder();
-                    googleDriveFileHolder.setId(fileMeta.getId());
-                    googleDriveFileHolder.setName(fileMeta.getName());
+                        FileContent fileContent = new FileContent("image/jpeg", file);
+
+                        File fileMeta = mDriveService.files().create(metadata, fileContent).setFields("id").execute();
+                        GoogleDriveFileHolder googleDriveFileHolder = new GoogleDriveFileHolder();
+                        googleDriveFileHolder.setId(fileMeta.getId());
+                        googleDriveFileHolder.setName(fileMeta.getName());
 
 
-                    googleDriveFileHolders.add(googleDriveFileHolder);
+                        googleDriveFileHolders.add(googleDriveFileHolder);
+
+                    }
+
 
                 }
 

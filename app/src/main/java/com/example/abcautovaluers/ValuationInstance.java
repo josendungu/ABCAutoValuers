@@ -108,14 +108,58 @@ public class ValuationInstance {
 
     }
 
+    private Boolean checkIfNull(String key){
+
+        String path = valSession.getString(KEY_PLATE_NO, null);
+        return path == null;
+
+    }
+
     public HashMap<String, File> getValuationData(){
 
         HashMap<String, File> valuationData = new HashMap<>();
 
-        valuationData.put(KEY_LOG_BOOK, new File(Objects.requireNonNull(valSession.getString(KEY_LOG_BOOK, null))));
-        valuationData.put(KEY_KRA, new File(Objects.requireNonNull(valSession.getString(KEY_KRA, null))));
-        valuationData.put(KEY_ID, new File(Objects.requireNonNull(valSession.getString(KEY_ID, null))));
-        valuationData.put(KEY_INSTRUCTIONS, new File(Objects.requireNonNull(valSession.getString(KEY_INSTRUCTIONS, null))));
+        if (checkIfNull(KEY_LOG_BOOK)){
+
+            valuationData.put(KEY_LOG_BOOK, null);
+
+        } else {
+
+            valuationData.put(KEY_LOG_BOOK, new File(Objects.requireNonNull(valSession.getString(KEY_LOG_BOOK, null))));
+
+        }
+
+        if (checkIfNull(KEY_KRA)){
+
+            valuationData.put(KEY_KRA, null);
+
+        } else {
+
+            valuationData.put(KEY_KRA, new File(Objects.requireNonNull(valSession.getString(KEY_KRA, null))));
+
+        }
+
+        if (checkIfNull(KEY_INSTRUCTIONS)){
+
+            valuationData.put(KEY_INSTRUCTIONS, null);
+
+        } else {
+
+            valuationData.put(KEY_INSTRUCTIONS, new File(Objects.requireNonNull(valSession.getString(KEY_INSTRUCTIONS, null))));
+
+
+        }
+
+        if (checkIfNull(KEY_ID)){
+
+            valuationData.put(KEY_ID, null);
+
+        } else {
+
+            valuationData.put(KEY_ID, new File(Objects.requireNonNull(valSession.getString(KEY_ID, null))));
+
+        }
+
         valuationData.put(KEY_FRONT, new File(Objects.requireNonNull(valSession.getString(KEY_FRONT, null))));
         valuationData.put(KEY_FRONT_RIGHT, new File(Objects.requireNonNull(valSession.getString(KEY_FRONT_RIGHT, null))));
         valuationData.put(KEY_FRONT_LEFT, new File(Objects.requireNonNull(valSession.getString(KEY_FRONT_LEFT, null))));

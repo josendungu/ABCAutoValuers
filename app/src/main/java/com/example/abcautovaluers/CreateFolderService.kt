@@ -55,8 +55,8 @@ class CreateFolderService: IntentService("CreateFolderService") {
     private fun handleCreateFolder() {
 
         mDriveServiceHelper.searchFolder("Valuations")
-            .addOnSuccessListener {
-                if (it.id == null) {
+            .addOnSuccessListener { valuationFolder ->
+                if (valuationFolder.id == null) {
 
                     sendFailure()
                     Log.d("Submitting Service", "Didn't get the id")
@@ -68,7 +68,7 @@ class CreateFolderService: IntentService("CreateFolderService") {
 
                             if (folder.id == null){
 
-                                mDriveServiceHelper.createFolder(username, it.id)
+                                mDriveServiceHelper.createFolder(username, valuationFolder.id)
                                     .addOnSuccessListener {
 
                                         val bundle = Bundle()
@@ -76,6 +76,7 @@ class CreateFolderService: IntentService("CreateFolderService") {
                                             BUNDLE_FOLDER_CREATED,
                                             "Appropriate folders have been created"
                                         )
+                                        bundle.putString(BUNDLE_FOLDER_EXISTS, it.id)
                                         resultReceiver.send(FOLDER_CREATED, bundle)
                                     }
                                     .addOnFailureListener {
@@ -91,12 +92,12 @@ class CreateFolderService: IntentService("CreateFolderService") {
                                     BUNDLE_FOLDER_EXISTS,
                                     "Folder already exists"
                                 )
+                                bundle.putString(BUNDLE_FOLDER_ID, folder.id)
                                 resultReceiver.send(FOLDER_EXISTS, bundle)
 
                             }
 
                         }
-
 
                         .addOnFailureListener {
 

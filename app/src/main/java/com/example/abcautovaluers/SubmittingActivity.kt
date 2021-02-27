@@ -17,7 +17,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_submitting.*
 import kotlinx.android.synthetic.main.activity_submitting.connection_state
 
@@ -80,7 +79,7 @@ class SubmittingActivity : AppCompatActivity() {
 
         val intent = Intent(this, SubmittingService::class.java)
         intent.putExtra("account", account)
-        intent.putExtra("username", SessionManager(this).username)
+        intent.putExtra("folderId", SessionManager(this).folderId)
         intent.putExtra("data", valuationData)
         intent.putExtra("plate_no", valuationInstance.plateNumber)
         intent.putExtra("receiver", resultReceiver)

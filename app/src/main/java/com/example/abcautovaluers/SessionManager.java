@@ -13,6 +13,7 @@ public class SessionManager {
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_IS_ADMIN = "is_admin";
     public static final String KEY_EMAIL = "email";
+    public static final String KEY_FOLDER_ID = "folder_id";
     public static final String KEY_SESSION_STATE = "state";
 
     public SessionManager(Context context){
@@ -27,6 +28,7 @@ public class SessionManager {
         editor.putString(KEY_USERNAME, user.getUsername());
         editor.putString(KEY_EMAIL, user.getEmail());
         editor.putString(KEY_PASSWORD, user.getPassword());
+        editor.putString(KEY_FOLDER_ID, user.getFolderId());
         editor.putBoolean(KEY_IS_ADMIN, user.getAdmin());
         editor.putBoolean(KEY_SESSION_STATE, state);
         editor.commit();
@@ -39,8 +41,9 @@ public class SessionManager {
         String password = userSession.getString(KEY_PASSWORD, null);
         String email = userSession.getString(KEY_EMAIL, null);
         Boolean isAdmin = userSession.getBoolean(KEY_IS_ADMIN, false);
+        String folderId = userSession.getString(KEY_FOLDER_ID, null);
 
-        return new User(username, password, email, isAdmin);
+        return new User(username, password, email, isAdmin, folderId);
 
     }
 
@@ -70,6 +73,12 @@ public class SessionManager {
     public String getUsername(){
 
         return userSession.getString(KEY_USERNAME, null);
+
+    }
+
+    public String getFolderId(){
+
+        return userSession.getString(KEY_FOLDER_ID, null);
 
     }
 

@@ -3,24 +3,26 @@ package com.example.abcautovaluers
 import android.os.Parcel
 import android.os.Parcelable
 
-data class User(val username: String?, val password: String?, val email: String?, val admin: Boolean?) : Parcelable {
+data class User(val username: String?, val password: String?, val email: String?, val admin: Boolean?, val folderId: String? ) : Parcelable {
 
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readByte() != 0.toByte()
+        parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
+        parcel.readString()
     ) {
     }
 
-    constructor(): this("","","",null)
+    constructor(): this("","","",null, "")
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(username)
         parcel.writeString(password)
         parcel.writeString(email)
-        parcel.writeByte(if (admin == true) 1 else 0)
+        parcel.writeValue(admin)
+        parcel.writeString(folderId)
     }
 
     override fun describeContents(): Int {

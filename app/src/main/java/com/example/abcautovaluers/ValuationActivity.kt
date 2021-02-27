@@ -81,30 +81,6 @@ class ValuationActivity : AppCompatActivity() {
         val valuationData = valuationInstance.valuationPresentState
 
         when {
-            valuationData[ValuationInstance.KEY_LOG_BOOK] == null -> {
-
-                handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_LOG_BOOK))
-                return false
-
-            }
-            valuationData[ValuationInstance.KEY_KRA] == null -> {
-
-                handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_KRA))
-                return false
-
-            }
-            valuationData[ValuationInstance.KEY_ID] == null -> {
-
-                handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_ID))
-                return false
-
-            }
-            valuationData[ValuationInstance.KEY_INSTRUCTIONS] == null -> {
-
-                handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_INSTRUCTIONS))
-                return false
-
-            }
             valuationData[ValuationInstance.KEY_FRONT] == null -> {
 
                 handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_FRONT))

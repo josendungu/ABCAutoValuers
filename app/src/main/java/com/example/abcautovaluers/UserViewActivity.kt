@@ -189,9 +189,9 @@ class UserViewActivity : AppCompatActivity() {
 
     }
 
-    private fun addUser() {
+    private fun addUser(folderId: String) {
 
-        val user = User(mUsername, mPassword, mEmail, mIsAdmin)
+        val user = User(mUsername, mPassword, mEmail, mIsAdmin, folderId)
         val addReference = FirebaseUtil.openFirebaseReference("Users/$mUsername")
         PopulateAlert(KEY_ADDING_USER, this@UserViewActivity)
         addReference.setValue(user)
@@ -251,13 +251,15 @@ class UserViewActivity : AppCompatActivity() {
 
                 FOLDER_CREATED -> {
 
-                    addUser()
+                    val folderId = resultData?.get(BUNDLE_FOLDER_ID)
+                    addUser(folderId as String)
                     Toast.makeText(this@UserViewActivity, "Folder was successfully created.", Toast.LENGTH_LONG).show()
 
                 }
                 FOLDER_EXISTS -> {
 
-                    addUser()
+                    val folderId = resultData?.get(BUNDLE_FOLDER_ID)
+                    addUser(folderId as String)
                     Toast.makeText(this@UserViewActivity, "Folder already exists", Toast.LENGTH_LONG).show()
 
                 }
