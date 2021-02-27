@@ -7,7 +7,7 @@
     <color name="colorBlack">#000</color>
     <color name="colorGrey">#2B2B2B</color>
     <color name="colorSuccess">#3E9141</color>
-    <color name="colorWhite">#FFFFFF</color>
+<color name="colorWhite">#FFFFFF</color>
     <color name="colorBackGround">#DFDEDE</color>
 
 </resources>

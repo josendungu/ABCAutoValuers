@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ public class ValuationInstance {
 
     public static final String KEY_PLATE_NO = "plate_no";
     public static final String KEY_LOG_BOOK = "Log Book";
-    public static final String KEY_KRA = "KRA";
+    public static final String KEY_KRA = "KRA Pin";
     public static final String KEY_ID = "ID";
     public static final String KEY_INSTRUCTIONS = "Instructions";
     public static final String KEY_FRONT = "Front";
@@ -52,6 +53,15 @@ public class ValuationInstance {
         editor.commit();
 
     }
+
+    public File getValuationItem(String key){
+
+        return new File(Objects.requireNonNull(valSession.getString(key, null)));
+
+    }
+
+
+
 
 
     public boolean checkValuation(){
@@ -120,6 +130,31 @@ public class ValuationInstance {
         valuationData.put(KEY_CHASSIS, new File(Objects.requireNonNull(valSession.getString(KEY_CHASSIS, null))));
 
         return valuationData;
+
+    }
+
+    public static ArrayList<String> getList(){
+
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        arrayList.add(KEY_LOG_BOOK);
+        arrayList.add(KEY_KRA);
+        arrayList.add(KEY_ID);
+        arrayList.add(KEY_INSTRUCTIONS);
+        arrayList.add(KEY_FRONT);
+        arrayList.add(KEY_FRONT_RIGHT);
+        arrayList.add(KEY_FRONT_LEFT);
+        arrayList.add(KEY_REAR);
+        arrayList.add(KEY_REAR_RIGHT);
+        arrayList.add(KEY_REAR_LEFT);
+        arrayList.add(KEY_MILLAGE);
+        arrayList.add(KEY_HEAD_LIGHT);
+        arrayList.add(KEY_DASHBOARD);
+        arrayList.add(KEY_RADIO);
+        arrayList.add(KEY_INSURANCE);
+        arrayList.add(KEY_CHASSIS);
+
+        return arrayList;
 
     }
 
