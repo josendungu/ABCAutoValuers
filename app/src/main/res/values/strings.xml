@@ -68,4 +68,5 @@
     <string name="add_new_user">Add User</string>
     <string name="adding_user">Adding user</string>
     <string name="check_connection">There has been an error during processing. Please check your internet connection and try again.</string>
+    <string name="item_view">Item View</string>
 </resources>

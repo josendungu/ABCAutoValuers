@@ -1,13 +1,24 @@
 package com.example.abcautovaluers
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.ResultReceiver
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.Scope
+import com.google.api.services.drive.DriveScopes
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.activity_submitting.*
 import kotlinx.android.synthetic.main.activity_user_view.*
 import kotlinx.android.synthetic.main.activity_user_view.buttonSubmit
 import kotlinx.android.synthetic.main.activity_user_view.checkBox
@@ -21,6 +32,15 @@ class UserViewActivity : AppCompatActivity() {
     private lateinit var mPassword: String
     private var mIsAdmin: Boolean = false
 
+    private val handler = Handler()
+
+    private val SIGNIN_CODE = 1
+
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private var account: GoogleSignInAccount? = null
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_view)
@@ -31,6 +51,8 @@ class UserViewActivity : AppCompatActivity() {
             et_email.error = null
             et_password.error = null
 
+            userProgress.visibility = View.VISIBLE
+
             mUsername = et_username.editText?.text.toString().trim()
             mEmail = et_email.editText?.text.toString().trim()
             mPassword =  et_password.editText?.text.toString().trim()
@@ -38,18 +60,67 @@ class UserViewActivity : AppCompatActivity() {
 
             if (validateUser() && validatePassword() && validateEmail()){
 
+                account = GoogleSignIn.getLastSignedInAccount(this)
+
                 validateUsername()
 
             } else {
 
                 Toast.makeText(this, "Some error", Toast.LENGTH_LONG).show()
+                hideProgress()
 
             }
 
 
+        }
+
+    }
+
+    private fun hideProgress(){
+
+        userProgress.visibility = View.INVISIBLE
+
+    }
+
+    private fun initializeGoogleSignIn() {
+
+        if (account?.email == null) {
+
+            requestUserSignIn()
+
+        } else {
+
+            Log.d("Account", "Account present")
+            initializeCreateFolder()
 
         }
 
+    }
+
+    private fun initializeCreateFolder() {
+
+        val resultReceiver = MyResultReceiver(handler)
+        val intent = Intent(this, CreateFolderService::class.java)
+        intent.putExtra("account", account)
+        intent.putExtra("receiver", resultReceiver)
+        intent.putExtra("username", mUsername)
+        startService(intent)
+
+    }
+
+    private fun requestUserSignIn() {
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, buildGoogleSignInOptions())
+        startActivityForResult(mGoogleSignInClient.signInIntent, SIGNIN_CODE)
+
+    }
+
+    private fun buildGoogleSignInOptions(): GoogleSignInOptions {
+        return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestScopes(Scope(DriveScopes.DRIVE))
+            .requestScopes(Scope(DriveScopes.DRIVE_FILE))
+            .requestEmail()
+            .build()
     }
 
     private fun validateUsername() {
@@ -61,12 +132,12 @@ class UserViewActivity : AppCompatActivity() {
 
                 if (!p0.exists()){
 
-                    addUser()
-
+                    initializeGoogleSignIn()
 
                 } else {
 
                     et_username.error = "Username is already taken. Enter another one and try again"
+                    hideProgress()
 
                 }
 
@@ -79,6 +150,42 @@ class UserViewActivity : AppCompatActivity() {
             }
 
         })
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+
+            SIGNIN_CODE -> {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+
+                    handleSignInResult(data);
+                }
+            }
+        }
+    }
+
+    private fun handleSignInResult(resultData: Intent) {
+
+        GoogleSignIn.getSignedInAccountFromIntent(resultData)
+            .addOnSuccessListener {
+
+                Log.d("Account Added", "Signed in as ${it.email}")
+                accountSelected.text = it.email
+                account = it
+                initializeCreateFolder()
+
+            }
+
+            .addOnFailureListener {
+
+                PopulateAlert(KEY_ERROR,this)
+                hideProgress()
+                Log.d("Account not added", "error ${it.toString()}")
+
+            }
 
     }
 
@@ -101,6 +208,7 @@ class UserViewActivity : AppCompatActivity() {
             .addOnFailureListener {
 
                 Log.d("Add User Exception", it.toString())
+                hideProgress()
                 PopulateAlert(KEY_USER_ADD_FAILURE, this@UserViewActivity)
 
             }
@@ -131,6 +239,37 @@ class UserViewActivity : AppCompatActivity() {
         Log.d("New User Password", state.toString())
         return state
 
+    }
+
+    private inner class MyResultReceiver(handler: Handler?) : ResultReceiver(handler) {
+
+        override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
+            super.onReceiveResult(resultCode, resultData)
+
+
+            when(resultCode){
+
+                FOLDER_CREATED -> {
+
+                    addUser()
+                    Toast.makeText(this@UserViewActivity, "Folder was successfully created.", Toast.LENGTH_LONG).show()
+
+                }
+                FOLDER_EXISTS -> {
+
+                    addUser()
+                    Toast.makeText(this@UserViewActivity, "Folder already exists", Toast.LENGTH_LONG).show()
+
+                }
+                ERROR_OCCURRED -> {
+
+                    hideProgress()
+                    PopulateAlert(KEY_ERROR, this@UserViewActivity)
+
+
+                }
+            }
+        }
     }
 
 }

@@ -20,13 +20,13 @@ import java.util.*
 class SubmittingService : IntentService("SubmittingService") {
 
     private val tag = "SubmittingService"
+
     private lateinit var mDriveServiceHelper: DriveServiceHelper
     private lateinit var valuationData: HashMap<String, File>
 
     private lateinit var plateNumber: String
     private lateinit var username: String
     private lateinit var resultReceiver: ResultReceiver
-    private lateinit var picList: MutableList<File>
 
     override fun onHandleIntent(p0: Intent?) {
 

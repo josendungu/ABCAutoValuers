@@ -3,6 +3,7 @@ package com.example.abcautovaluers
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_dashboard.*
@@ -36,17 +37,28 @@ class DashboardActivity : AppCompatActivity() {
 
         }
 
+
         userSession.setLoggedState(true)
 
-        if (!mUser.admin!!){
+        addUser.setOnClickListener {
 
-            buttonNewUser.visibility = View.INVISIBLE
+            if (mUser.admin!!){
+
+                val intent = Intent(this, UserViewActivity::class.java)
+                startActivity(intent)
+
+            } else {
+
+                Snackbar.make(snackViewCont, "You do not have permission to add users", Snackbar.LENGTH_LONG).show()
+
+            }
+
 
         }
 
         textMemberName.text = getString(R.string.welcome, mUser.username)
 
-        buttonNew.setOnClickListener {
+        valuate.setOnClickListener {
 
             if (valuationInstance.checkValuation()){
 
@@ -61,14 +73,7 @@ class DashboardActivity : AppCompatActivity() {
 
         }
 
-        buttonNewUser.setOnClickListener {
-
-            val intent = Intent(this, UserViewActivity::class.java)
-            startActivity(intent)
-
-        }
-
-        buttonLogout.setOnClickListener {
+        logout.setOnClickListener {
 
             userSession.logoutUser()
             val intent = Intent(this, LoginActivity::class.java)
@@ -92,3 +97,5 @@ class DashboardActivity : AppCompatActivity() {
     }
 
 }
+
+

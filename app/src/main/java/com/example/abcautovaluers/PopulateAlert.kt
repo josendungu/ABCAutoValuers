@@ -81,6 +81,7 @@ class PopulateAlert(
 
                     dialog.cancel()
                     val intent = Intent(activity, DashboardActivity::class.java)
+                    intent.putExtra(DashboardActivity.USER_ADDED, false)
                     activity.startActivity(intent)
 
                 }

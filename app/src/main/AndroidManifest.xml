@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UserViewActivity"></activity>
+        <activity android:name=".UserViewActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -39,7 +39,7 @@
         </activity>
 
         <service android:name=".SubmittingService" />
-        <service android:name=".LoginService" />
+        <service android:name=".CreateFolderService" />
     </application>
 
 </manifest>

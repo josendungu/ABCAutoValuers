@@ -20,12 +20,14 @@ const val FRONT_CODE = 25
 const val FOLDER_CREATED = 70
 const val IMAGES_UPLOADED = 71
 const val ERROR_OCCURRED = 72
+const val FOLDER_EXISTS = 73
 
 const val BUNDLE_FOLDER_CREATED = "folder_created"
 const val BUNDLE_IMAGES_UPLOADED = "images_uploaded"
 const val BUNDLE_PASSWORD_DO_NOT_MATCH = "passwords_do_not_match"
 const val BUNDLE_MEMBER_DOES_NOT_EXIST = "member_does_not_exist"
 const val BUNDLE_ERROR = "error"
+const val BUNDLE_FOLDER_EXISTS = "exists"
 
 const val KEY_VALUATION_ALERT = 1
 const val KEY_BACK_PRESSED_ALERT = 4
