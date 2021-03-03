@@ -45,6 +45,7 @@ class ValuationActivity : AppCompatActivity() {
 
         buttonSubmit.setOnClickListener {
 
+            textPlateNumber.error = null
             val plateNumber = textPlateNumber.editText?.text.toString()
 
             if (plateNumber.isNotEmpty()) {
@@ -173,165 +174,230 @@ class ValuationActivity : AppCompatActivity() {
         when (requestCode) {
 
             LOG_BOOK_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
 
             KRA_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
 
             ID_CODE -> {
+
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
 
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             INSTRUCTIONS_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             FRONT_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             FRONT_RIGHT_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             FRONT_LEFT_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             REAR_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             REAR_RIGHT_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             REAR_LEFT_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             MILLAGE_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             HEAD_LIGHT_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             DASHBOARD_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             RADIO_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             INSURANCE_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
             CHASSIS_CODE -> {
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
                 if (resultCode == Activity.RESULT_OK) {
 
-                    val key = getKey(requestCode)
-                    val file = valuationInstance.getValuationItem(key)
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
 
                 }
             }
@@ -358,8 +424,6 @@ class ValuationActivity : AppCompatActivity() {
             }
 
         }
-
-        //TODO: Notify data set changed
 
     }
 

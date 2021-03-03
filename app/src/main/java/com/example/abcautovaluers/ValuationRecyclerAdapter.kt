@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.graphics.BitmapFactory
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
@@ -16,7 +15,6 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.abcautovaluers.*
@@ -30,7 +28,8 @@ class ValuationRecyclerAdapter(
 
     private val activity = context as Activity
     private lateinit var valuationData: HashMap<String, String>
-    private val list = ValuationInstance.getList()
+    private lateinit var valuationList: ArrayList<String>
+    private val list = ValuationInstance.getItemList()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -42,6 +41,8 @@ class ValuationRecyclerAdapter(
         valuationData = ValuationInstance(context).valuationPresentState
 
         val key = list[position]
+        Log.d("Identifier: Name", key)
+        Log.d("Identifier: Id", position.toString())
         val filePath = valuationData[key]
 
         if (filePath != null) {
@@ -50,17 +51,13 @@ class ValuationRecyclerAdapter(
             holder.outline.setBackgroundResource(R.drawable.pic_item_background_added)
 
         }
+        holder.setIsRecyclable(false)
 
         holder.displayText.text = key
 
     }
 
-    override fun getItemCount(): Int {
-
-        valuationData = ValuationInstance(context).valuationPresentState
-
-        return valuationData.size -1
-    }
+    override fun getItemCount(): Int = list.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

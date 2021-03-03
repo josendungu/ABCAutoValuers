@@ -76,7 +76,7 @@ class CreateFolderService: IntentService("CreateFolderService") {
                                             BUNDLE_FOLDER_CREATED,
                                             "Appropriate folders have been created"
                                         )
-                                        bundle.putString(BUNDLE_FOLDER_EXISTS, it.id)
+                                        bundle.putString(BUNDLE_FOLDER_ID, it.id)
                                         resultReceiver.send(FOLDER_CREATED, bundle)
                                     }
                                     .addOnFailureListener {

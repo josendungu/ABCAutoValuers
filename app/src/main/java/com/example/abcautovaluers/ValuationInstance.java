@@ -3,6 +3,8 @@ package com.example.abcautovaluers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,7 +179,8 @@ public class ValuationInstance {
 
     }
 
-    public static ArrayList<String> getList(){
+    @NotNull
+    public static ArrayList<String> getItemList(){
 
         ArrayList<String> arrayList = new ArrayList<>();
 
@@ -201,5 +204,7 @@ public class ValuationInstance {
         return arrayList;
 
     }
+
+
 
 }
