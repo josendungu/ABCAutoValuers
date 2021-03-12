@@ -1,7 +1,12 @@
 package com.example.abcautovaluers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -12,8 +17,10 @@ import java.util.Objects;
 
 public class ValuationInstance {
 
-    private SharedPreferences valSession;
-    private SharedPreferences.Editor editor;
+    private final SharedPreferences valSession;
+    private final SharedPreferences.Editor editor;
+
+    private Context mContext;
 
     public static final String KEY_VALUATION_PRESENT = "valuation_present";
 
@@ -22,23 +29,25 @@ public class ValuationInstance {
     public static final String KEY_KRA = "KRA Pin";
     public static final String KEY_ID = "ID";
     public static final String KEY_INSTRUCTIONS = "Instructions";
-    public static final String KEY_FRONT = "Front";
-    public static final String KEY_FRONT_LEFT = "Front Left";
-    public static final String KEY_FRONT_RIGHT = "Front Right";
-    public static final String KEY_REAR = "Rear";
-    public static final String KEY_REAR_RIGHT = "Rear Right";
-    public static final String KEY_REAR_LEFT = "Rear Left";
-    public static final String KEY_HEAD_LIGHT = "Head Light";
-    public static final String KEY_MILLAGE = "Millage";
-    public static final String KEY_DASHBOARD = "Dashboard";
-    public static final String KEY_RADIO = "Radio";
-    public static final String KEY_INSURANCE = "Insurance";
-    public static final String KEY_CHASSIS = "Chassis";
+    public static final String KEY_FRONT = "*Front";
+    public static final String KEY_FRONT_LEFT = "*Front Left";
+    public static final String KEY_FRONT_RIGHT = "*Front Right";
+    public static final String KEY_REAR = "*Rear";
+    public static final String KEY_REAR_RIGHT = "*Rear Right";
+    public static final String KEY_REAR_LEFT = "*Rear Left";
+    public static final String KEY_HEAD_LIGHT = "*Head Light";
+    public static final String KEY_MILLAGE = "*Millage";
+    public static final String KEY_DASHBOARD = "*Dashboard";
+    public static final String KEY_RADIO = "*Radio";
+    public static final String KEY_INSURANCE = "*Insurance";
+    public static final String KEY_CHASSIS = "*Chassis";
 
     public ValuationInstance(Context context ){
 
         valSession = context.getSharedPreferences("valuationInstanceSession", Context.MODE_PRIVATE);
         editor = valSession.edit();
+
+        mContext = context;
 
 
     }
@@ -74,6 +83,7 @@ public class ValuationInstance {
 
     public void clearInstance(){
 
+        deleteFiles();
         editor.clear().commit();
 
     }
@@ -112,7 +122,7 @@ public class ValuationInstance {
 
     private Boolean checkIfNull(String key){
 
-        String path = valSession.getString(KEY_PLATE_NO, null);
+        String path = valSession.getString(key, null);
         return path == null;
 
     }
@@ -202,6 +212,42 @@ public class ValuationInstance {
         arrayList.add(KEY_CHASSIS);
 
         return arrayList;
+
+    }
+
+    private void deleteFiles() {
+
+        HashMap<String, File> valuationData = getValuationData();
+
+        for (java.util.Map.Entry<String, File> stringFileEntry : valuationData.entrySet()) {
+
+            if (stringFileEntry != null){
+
+                File file = stringFileEntry.getValue();
+                if (file != null){
+                    if (file.exists()){
+                        boolean deleted = file.delete();
+
+                        if (!deleted){
+
+                            String text = "File "+file.getAbsolutePath()+" was not deleted. Please delete it manually";
+                            Toast.makeText(mContext, text, Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                } else {
+
+
+                    Log.d("Delete", "File "+stringFileEntry+" was not deleted. Please delete it manually");
+
+                }
+
+
+
+            }
+
+        }
+
 
     }
 

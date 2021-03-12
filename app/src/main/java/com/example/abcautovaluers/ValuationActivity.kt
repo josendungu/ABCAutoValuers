@@ -32,6 +32,12 @@ class ValuationActivity : AppCompatActivity() {
 
         valuationInstance = ValuationInstance(this)
 
+        val plateNumberSet = valuationInstance.plateNumber
+
+        if (plateNumberSet != null){
+            textPlateNumber.editText?.setText(plateNumberSet)
+        }
+
         if (takePicIntent.resolveActivity(this.packageManager) != null) {
 
             valuationRecyclerView.adapter =

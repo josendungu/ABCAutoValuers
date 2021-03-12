@@ -2,16 +2,14 @@ package com.example.abcautovaluers
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AlertDialog.Builder
-import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.alert.view.*
-import kotlinx.android.synthetic.main.alert.view.tv_info
 import kotlinx.android.synthetic.main.back_pressed_alert.view.*
 import kotlinx.android.synthetic.main.valuation_alert.view.*
+import java.io.File
 
 class PopulateAlert(
     instance: Int,
@@ -139,11 +137,11 @@ class PopulateAlert(
                 view.button_action.setOnClickListener {
 
                     dialog.cancel()
+                    ValuationInstance(activity).clearInstance()
                     val intent = Intent(activity, DashboardActivity::class.java)
                     intent.putExtra(DashboardActivity.USER_ADDED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
-                    ValuationInstance(activity).clearInstance()
 
                 }
 
@@ -174,5 +172,6 @@ class PopulateAlert(
             }
         }
     }
+
 
 }

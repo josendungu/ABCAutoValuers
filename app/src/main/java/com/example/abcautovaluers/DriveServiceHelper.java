@@ -218,7 +218,7 @@ public class DriveServiceHelper {
 
                 for (java.util.Map.Entry<String, java.io.File> stringFileEntry : valuationData.entrySet()) {
 
-                    if (stringFileEntry != null){
+                    if (stringFileEntry.getValue() != null){
 
                         String name = stringFileEntry.getKey();
                         java.io.File file = stringFileEntry.getValue();

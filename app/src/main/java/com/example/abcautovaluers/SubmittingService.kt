@@ -98,8 +98,8 @@ class SubmittingService : IntentService("SubmittingService") {
 
                         val bundleErrorImages = Bundle()
                         bundleErrorImages.putString(
-                            BUNDLE_FOLDER_CREATED,
-                            "Error: ${exceptionImages.toString()}"
+                            BUNDLE_ERROR,
+                            exceptionImages.toString()
                         )
                         resultReceiver.send(ERROR_OCCURRED, bundleErrorImages)
 

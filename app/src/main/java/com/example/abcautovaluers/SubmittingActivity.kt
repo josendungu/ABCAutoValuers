@@ -177,6 +177,7 @@ class SubmittingActivity : AppCompatActivity() {
                 ERROR_OCCURRED -> {
 
                     PopulateAlert(KEY_ERROR_UPLOAD, mContext as Activity)
+                    Log.d("Error:", resultData?.get(BUNDLE_ERROR) as String)
 
                 }
 
