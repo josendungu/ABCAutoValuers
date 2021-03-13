@@ -16,6 +16,7 @@ const val MILLAGE_CODE = 22
 const val INSURANCE_CODE = 23
 const val KRA_CODE = 24
 const val FRONT_CODE = 25
+const val ENGINE_CODE = 26
 
 const val FOLDER_CREATED = 70
 const val IMAGES_UPLOADED = 71
@@ -60,6 +61,7 @@ const val MILLAGE_NAME = "millage.jpg"
 const val INSURANCE_NAME= "insurance.jpg"
 const val KRA_NAME = "kra.jpg"
 const val FRONT_NAME= "front.jpg"
+const val ENGINE_NAME= "engine.jpg"
 
 
 const val DASHBOARD_REF = 100

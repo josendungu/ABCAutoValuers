@@ -36,6 +36,7 @@ public class ValuationInstance {
     public static final String KEY_REAR_RIGHT = "*Rear Right";
     public static final String KEY_REAR_LEFT = "*Rear Left";
     public static final String KEY_HEAD_LIGHT = "*Head Light";
+    public static final String KEY_ENGINE = "*Engine";
     public static final String KEY_MILLAGE = "*Millage";
     public static final String KEY_DASHBOARD = "*Dashboard";
     public static final String KEY_RADIO = "*Radio";
@@ -115,6 +116,7 @@ public class ValuationInstance {
         valuationData.put(KEY_RADIO, valSession.getString(KEY_RADIO, null));
         valuationData.put(KEY_INSURANCE, valSession.getString(KEY_INSURANCE, null));
         valuationData.put(KEY_CHASSIS, valSession.getString(KEY_CHASSIS, null));
+        valuationData.put(KEY_ENGINE, valSession.getString(KEY_ENGINE, null));
 
         return valuationData;
 
@@ -178,6 +180,7 @@ public class ValuationInstance {
         valuationData.put(KEY_REAR, new File(Objects.requireNonNull(valSession.getString(KEY_REAR, null))));
         valuationData.put(KEY_REAR_RIGHT, new File(Objects.requireNonNull(valSession.getString(KEY_REAR_RIGHT, null))));
         valuationData.put(KEY_REAR_LEFT, new File(Objects.requireNonNull(valSession.getString(KEY_REAR_LEFT, null))));
+        valuationData.put(KEY_ENGINE, new File(Objects.requireNonNull(valSession.getString(KEY_ENGINE, null))));
         valuationData.put(KEY_MILLAGE, new File(Objects.requireNonNull(valSession.getString(KEY_MILLAGE, null))));
         valuationData.put(KEY_HEAD_LIGHT, new File(Objects.requireNonNull(valSession.getString(KEY_HEAD_LIGHT, null))));
         valuationData.put(KEY_DASHBOARD, new File(Objects.requireNonNull(valSession.getString(KEY_DASHBOARD, null))));
@@ -204,6 +207,7 @@ public class ValuationInstance {
         arrayList.add(KEY_REAR);
         arrayList.add(KEY_REAR_RIGHT);
         arrayList.add(KEY_REAR_LEFT);
+        arrayList.add(KEY_ENGINE);
         arrayList.add(KEY_MILLAGE);
         arrayList.add(KEY_HEAD_LIGHT);
         arrayList.add(KEY_DASHBOARD);

@@ -109,6 +109,11 @@ class ValuationRecyclerAdapter(
                     return FRONT_NAME
 
                 }
+                ValuationInstance.KEY_ENGINE -> {
+
+                    return ENGINE_NAME
+
+                }
                 ValuationInstance.KEY_FRONT_LEFT -> {
 
                     return FRONT_LEFT_NAME
@@ -201,9 +206,14 @@ class ValuationRecyclerAdapter(
                     return FRONT_CODE
 
                 }
+
                 ValuationInstance.KEY_FRONT_LEFT -> {
 
                     return FRONT_LEFT_CODE
+
+                }ValuationInstance.KEY_ENGINE -> {
+
+                    return ENGINE_CODE
 
                 }
                 ValuationInstance.KEY_FRONT_RIGHT -> {

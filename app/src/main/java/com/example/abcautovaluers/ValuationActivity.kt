@@ -94,6 +94,12 @@ class ValuationActivity : AppCompatActivity() {
                 return false
 
             }
+            valuationData[ValuationInstance.KEY_ENGINE] == null -> {
+
+                handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_ENGINE))
+                return false
+
+            }
             valuationData[ValuationInstance.KEY_FRONT_RIGHT] == null -> {
 
                 handleErrorDisplay( getString(R.string.error_message, ValuationInstance.KEY_FRONT_RIGHT))
@@ -201,6 +207,22 @@ class ValuationActivity : AppCompatActivity() {
 
                     handleIfNotPresent(file, key)
                     handleResultPresentProperty()
+
+                } else {
+
+                    handleIfNotPresent(file, key)
+
+                }
+            }
+            ENGINE_CODE -> {
+
+                val key = getKey(requestCode)
+                val file = valuationInstance.getValuationItem(key)
+                if (resultCode == Activity.RESULT_OK) {
+
+                    handleIfNotPresent(file, key)
+                    handleResultPresentProperty()
+
 
                 } else {
 
@@ -444,6 +466,11 @@ class ValuationActivity : AppCompatActivity() {
             DASHBOARD_CODE -> {
 
                 return ValuationInstance.KEY_DASHBOARD
+
+            }
+            ENGINE_CODE -> {
+
+                return ValuationInstance.KEY_ENGINE
 
             }
             FRONT_CODE -> {
