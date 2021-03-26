@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UserViewActivity"/>
+        <activity android:name=".ScheduleViewActivity"/>
+        <activity android:name=".ScheduleListActivity" />
+        <activity android:name=".UserViewActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

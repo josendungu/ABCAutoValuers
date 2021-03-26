@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -43,13 +44,13 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         val networkConnection = NetworkConnection(applicationContext)
-        networkConnection.observe(this, Observer {
+        networkConnection.observe(this, {
 
             if (it) {
 
                 connection_state.visibility = View.VISIBLE
                 connection_state.text = getString(R.string.connected)
-                connection_state.setBackgroundColor(resources.getColor(R.color.colorSuccess))
+                connection_state.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.colorSuccess))
 
                 Handler().postDelayed({
 
@@ -61,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
 
                 connection_state.visibility = View.VISIBLE
                 connection_state.text = getString(R.string.not_connected)
-                connection_state.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+                connection_state.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.colorPrimary))
 
             }
         })
@@ -132,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
 
         val databaseRef = FirebaseUtil.openFirebaseReference("Users")
 
-        var user: User? = null
+        var user: User?
 
         if (username != null) {
             databaseRef.child(username).addListenerForSingleValueEvent(object : ValueEventListener {

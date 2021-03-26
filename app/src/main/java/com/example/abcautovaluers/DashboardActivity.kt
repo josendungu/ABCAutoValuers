@@ -56,6 +56,12 @@ class DashboardActivity : AppCompatActivity() {
 
         }
 
+        scheduled.setOnClickListener{
+            val intent = Intent(this, ScheduleListActivity::class.java)
+            startActivity(intent)
+
+        }
+
         textMemberName.text = getString(R.string.welcome, mUser.username)
 
         valuate.setOnClickListener {
