@@ -13,7 +13,8 @@ import java.io.File
 
 class PopulateAlert(
     instance: Int,
-    activity: Activity
+    activity: Activity,
+    scheduleDetails: ScheduleDetails? = null
 ) {
 
     private lateinit var view: View
@@ -35,18 +36,17 @@ class PopulateAlert(
                 dialog = alert.create()
                 view.button_proceed.setOnClickListener {
 
+                    ValuationInstance(activity).clearInstance()
                     dialog.cancel()
                     val intent = Intent(activity, ValuationActivity::class.java)
+                    intent.putExtra(ValuationActivity.SCHEDULED_STRING , scheduleDetails)
                     activity.startActivity(intent)
 
                 }
 
-                view.button_start.setOnClickListener {
+                view.button_cancel.setOnClickListener {
 
-                    ValuationInstance(activity).clearInstance()
                     dialog.cancel()
-                    val intent = Intent(activity, ValuationActivity::class.java)
-                    activity.startActivity(intent)
 
                 }
 
@@ -79,6 +79,7 @@ class PopulateAlert(
 
                     dialog.cancel()
                     val intent = Intent(activity, DashboardActivity::class.java)
+                    intent.putExtra(DashboardActivity.ASSIGNED, false)
                     intent.putExtra(DashboardActivity.USER_ADDED, false)
                     activity.startActivity(intent)
 
@@ -105,6 +106,7 @@ class PopulateAlert(
                     dialog.cancel()
                     val intent = Intent(activity, DashboardActivity::class.java)
                     intent.putExtra(DashboardActivity.USER_ADDED, false)
+                    intent.putExtra(DashboardActivity.ASSIGNED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
 
@@ -116,6 +118,7 @@ class PopulateAlert(
                     dialog.cancel()
                     val intent = Intent(activity, DashboardActivity::class.java)
                     intent.putExtra(DashboardActivity.USER_ADDED, false)
+                    intent.putExtra(DashboardActivity.ASSIGNED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
 
@@ -140,6 +143,7 @@ class PopulateAlert(
                     ValuationInstance(activity).clearInstance()
                     val intent = Intent(activity, DashboardActivity::class.java)
                     intent.putExtra(DashboardActivity.USER_ADDED, false)
+                    intent.putExtra(DashboardActivity.ASSIGNED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
 

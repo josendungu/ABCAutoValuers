@@ -43,7 +43,18 @@ public class ValuationInstance {
     public static final String KEY_INSURANCE = "*Insurance";
     public static final String KEY_CHASSIS = "*Chassis";
 
-    public ValuationInstance(Context context ){
+
+    public static final String KEY_EMAIL = "email";
+    public static final String KEY_FIRST_NAME = "first_name";
+    public static final String KEY_LAST_NAME = "last_name";
+    public static final String KEY_ASSIGNED_TO = "assigned_to";
+    public static final String KEY_PHONE_NUMBER = "phone_number";
+    public static final String KEY_SURNAME = "surname";
+    public static final String KEY_CLIENT_ID = "client_id";
+    public static final String KEY_SCHEDULE_ID = "schedule_id";
+
+
+    public ValuationInstance(Context context) {
 
         valSession = context.getSharedPreferences("valuationInstanceSession", Context.MODE_PRIVATE);
         editor = valSession.edit();
@@ -53,9 +64,10 @@ public class ValuationInstance {
 
     }
 
-    public void addValuationItem(String key, String filePath){
 
-        if (!checkValuation()){
+    public void addValuationItem(String key, String filePath) {
+
+        if (!checkValuation()) {
 
             editor.putBoolean(KEY_VALUATION_PRESENT, true);
 
@@ -66,42 +78,65 @@ public class ValuationInstance {
 
     }
 
-    public File getValuationItem(String key){
+    public File getValuationItem(String key) {
 
         return new File(Objects.requireNonNull(valSession.getString(key, null)));
 
     }
 
+    public void addScheduleDetails(ScheduleDetails scheduleDetails) {
+        addValuationItem(KEY_SURNAME, scheduleDetails.getSurname());
+        addValuationItem(KEY_FIRST_NAME, scheduleDetails.getFirstName());
+        addValuationItem(KEY_LAST_NAME, scheduleDetails.getLastName());
+        addValuationItem(KEY_PLATE_NO, scheduleDetails.getPlateNumber());
+        addValuationItem(KEY_ASSIGNED_TO, scheduleDetails.getAssignedTo());
+        addValuationItem(KEY_EMAIL, scheduleDetails.getEmail());
+        addValuationItem(KEY_PHONE_NUMBER, scheduleDetails.getPhoneNumber());
+        addValuationItem(KEY_CLIENT_ID, scheduleDetails.getId());
+        addValuationItem(KEY_SCHEDULE_ID, scheduleDetails.getScheduleId());
+    }
+
+    public ScheduleDetails getScheduleDetails() {
+        String surname = valSession.getString(KEY_SURNAME, null);
+        String first_name = valSession.getString(KEY_FIRST_NAME, null);
+        String last_name = valSession.getString(KEY_LAST_NAME, null);
+        String assigned_to = valSession.getString(KEY_ASSIGNED_TO, null);
+        String email = valSession.getString(KEY_EMAIL, null);
+        String phone_number = valSession.getString(KEY_PHONE_NUMBER, null);
+        String client_id = valSession.getString(KEY_CLIENT_ID, null);
+        String schedule_id = valSession.getString(KEY_SCHEDULE_ID, null);
+        String plate_no = valSession.getString(KEY_PLATE_NO, null);
+
+        return new ScheduleDetails(surname, first_name, last_name, phone_number, email, client_id, schedule_id, plate_no, null, null, null, null, null, assigned_to, false);
+    }
 
 
-
-
-    public boolean checkValuation(){
+    public boolean checkValuation() {
 
         return valSession.getBoolean(KEY_VALUATION_PRESENT, false);
 
     }
 
-    public void clearInstance(){
+    public void clearInstance() {
 
         deleteFiles();
         editor.clear().commit();
 
     }
 
-    public String getPlateNumber(){
+    public String getPlateNumber() {
 
         return valSession.getString(KEY_PLATE_NO, null);
 
     }
 
-    public HashMap<String, String> getValuationPresentState(){
+    public HashMap<String, String> getValuationPresentState() {
 
         HashMap<String, String> valuationData = new HashMap<>();
 
         valuationData.put(KEY_PLATE_NO, valSession.getString(KEY_PLATE_NO, null));
         valuationData.put(KEY_LOG_BOOK, valSession.getString(KEY_LOG_BOOK, null));
-        valuationData.put(KEY_KRA,valSession.getString(KEY_KRA, null));
+        valuationData.put(KEY_KRA, valSession.getString(KEY_KRA, null));
         valuationData.put(KEY_ID, valSession.getString(KEY_ID, null));
         valuationData.put(KEY_INSTRUCTIONS, valSession.getString(KEY_INSTRUCTIONS, null));
         valuationData.put(KEY_FRONT, valSession.getString(KEY_FRONT, null));
@@ -122,18 +157,18 @@ public class ValuationInstance {
 
     }
 
-    private Boolean checkIfNull(String key){
+    private Boolean checkIfNull(String key) {
 
         String path = valSession.getString(key, null);
         return path == null;
 
     }
 
-    public HashMap<String, File> getValuationData(){
+    public HashMap<String, File> getValuationData() {
 
         HashMap<String, File> valuationData = new HashMap<>();
 
-        if (checkIfNull(KEY_LOG_BOOK)){
+        if (checkIfNull(KEY_LOG_BOOK)) {
 
             valuationData.put(KEY_LOG_BOOK, null);
 
@@ -143,7 +178,7 @@ public class ValuationInstance {
 
         }
 
-        if (checkIfNull(KEY_KRA)){
+        if (checkIfNull(KEY_KRA)) {
 
             valuationData.put(KEY_KRA, null);
 
@@ -153,7 +188,7 @@ public class ValuationInstance {
 
         }
 
-        if (checkIfNull(KEY_INSTRUCTIONS)){
+        if (checkIfNull(KEY_INSTRUCTIONS)) {
 
             valuationData.put(KEY_INSTRUCTIONS, null);
 
@@ -164,7 +199,7 @@ public class ValuationInstance {
 
         }
 
-        if (checkIfNull(KEY_ID)){
+        if (checkIfNull(KEY_ID)) {
 
             valuationData.put(KEY_ID, null);
 
@@ -174,26 +209,141 @@ public class ValuationInstance {
 
         }
 
-        valuationData.put(KEY_FRONT, new File(Objects.requireNonNull(valSession.getString(KEY_FRONT, null))));
-        valuationData.put(KEY_FRONT_RIGHT, new File(Objects.requireNonNull(valSession.getString(KEY_FRONT_RIGHT, null))));
-        valuationData.put(KEY_FRONT_LEFT, new File(Objects.requireNonNull(valSession.getString(KEY_FRONT_LEFT, null))));
-        valuationData.put(KEY_REAR, new File(Objects.requireNonNull(valSession.getString(KEY_REAR, null))));
-        valuationData.put(KEY_REAR_RIGHT, new File(Objects.requireNonNull(valSession.getString(KEY_REAR_RIGHT, null))));
-        valuationData.put(KEY_REAR_LEFT, new File(Objects.requireNonNull(valSession.getString(KEY_REAR_LEFT, null))));
-        valuationData.put(KEY_ENGINE, new File(Objects.requireNonNull(valSession.getString(KEY_ENGINE, null))));
-        valuationData.put(KEY_MILLAGE, new File(Objects.requireNonNull(valSession.getString(KEY_MILLAGE, null))));
-        valuationData.put(KEY_HEAD_LIGHT, new File(Objects.requireNonNull(valSession.getString(KEY_HEAD_LIGHT, null))));
-        valuationData.put(KEY_DASHBOARD, new File(Objects.requireNonNull(valSession.getString(KEY_DASHBOARD, null))));
-        valuationData.put(KEY_RADIO, new File(Objects.requireNonNull(valSession.getString(KEY_RADIO, null))));
-        valuationData.put(KEY_INSURANCE, new File(Objects.requireNonNull(valSession.getString(KEY_INSURANCE, null))));
-        valuationData.put(KEY_CHASSIS, new File(Objects.requireNonNull(valSession.getString(KEY_CHASSIS, null))));
+        if (!checkIfNull(KEY_FRONT)){
+
+            valuationData.put(KEY_FRONT, new File(Objects.requireNonNull(valSession.getString(KEY_FRONT, null))));
+
+        } else {
+            valuationData.put(KEY_FRONT, null);
+
+        }
+
+        if (!checkIfNull(KEY_HEAD_LIGHT)){
+
+            valuationData.put(KEY_HEAD_LIGHT, new File(Objects.requireNonNull(valSession.getString(KEY_HEAD_LIGHT, null))));
+
+        } else {
+
+            valuationData.put(KEY_HEAD_LIGHT, null);
+
+        }
+
+        if (!checkIfNull(KEY_MILLAGE)){
+
+            valuationData.put(KEY_MILLAGE, new File(Objects.requireNonNull(valSession.getString(KEY_MILLAGE, null))));
+
+        } else {
+            valuationData.put(KEY_MILLAGE, null);
+
+        }
+
+        if (!checkIfNull(KEY_ENGINE)){
+
+            valuationData.put(KEY_ENGINE, new File(Objects.requireNonNull(valSession.getString(KEY_ENGINE, null))));
+
+        } else {
+            valuationData.put(KEY_ENGINE, null);
+
+        }
+
+
+        if (!checkIfNull(KEY_REAR_LEFT)){
+
+            valuationData.put(KEY_REAR_LEFT, new File(Objects.requireNonNull(valSession.getString(KEY_REAR_LEFT, null))));
+
+        } else {
+
+            valuationData.put(KEY_REAR_LEFT, null);
+
+        }
+
+        if (!checkIfNull(KEY_REAR_RIGHT)){
+
+            valuationData.put(KEY_REAR_RIGHT, new File(Objects.requireNonNull(valSession.getString(KEY_REAR_RIGHT, null))));
+
+        } else {
+
+            valuationData.put(KEY_REAR_RIGHT, null);
+
+        }
+
+        if (!checkIfNull(KEY_REAR)){
+
+            valuationData.put(KEY_REAR, new File(Objects.requireNonNull(valSession.getString(KEY_REAR, null))));
+
+        } else {
+
+            valuationData.put(KEY_REAR, null);
+
+        }
+
+        if (!checkIfNull(KEY_FRONT_LEFT)){
+
+            valuationData.put(KEY_FRONT_LEFT, new File(Objects.requireNonNull(valSession.getString(KEY_FRONT_LEFT, null))));
+
+        } else {
+
+            valuationData.put(KEY_FRONT_LEFT, null);
+
+        }
+
+        if (!checkIfNull(KEY_FRONT_RIGHT)){
+
+            valuationData.put(KEY_FRONT_RIGHT, new File(Objects.requireNonNull(valSession.getString(KEY_FRONT_RIGHT, null))));
+
+        } else {
+            valuationData.put(KEY_FRONT_RIGHT, null);
+
+        }
+
+        if (checkIfNull(KEY_DASHBOARD)) {
+
+            valuationData.put(KEY_DASHBOARD, null);
+
+        } else {
+
+            valuationData.put(KEY_DASHBOARD, new File(Objects.requireNonNull(valSession.getString(KEY_DASHBOARD, null))));
+
+        }
+
+        if (checkIfNull(KEY_RADIO)) {
+
+            valuationData.put(KEY_RADIO, null);
+
+        } else {
+
+            valuationData.put(KEY_RADIO, new File(Objects.requireNonNull(valSession.getString(KEY_RADIO, null))));
+
+        }
+
+        if (checkIfNull(KEY_INSURANCE)) {
+
+            valuationData.put(KEY_INSURANCE, null);
+
+        } else {
+
+            valuationData.put(KEY_INSURANCE, new File(Objects.requireNonNull(valSession.getString(KEY_INSURANCE, null))));
+
+        }
+
+        if (checkIfNull(KEY_CHASSIS)) {
+
+            valuationData.put(KEY_CHASSIS, null);
+
+        } else {
+
+            valuationData.put(KEY_CHASSIS, new File(Objects.requireNonNull(valSession.getString(KEY_CHASSIS, null))));
+
+        }
+
+
 
         return valuationData;
 
     }
 
     @NotNull
-    public static ArrayList<String> getItemList(){
+    public static ArrayList<String> getItemList() {
 
         ArrayList<String> arrayList = new ArrayList<>();
 
@@ -225,16 +375,16 @@ public class ValuationInstance {
 
         for (java.util.Map.Entry<String, File> stringFileEntry : valuationData.entrySet()) {
 
-            if (stringFileEntry != null){
+            if (stringFileEntry != null) {
 
                 File file = stringFileEntry.getValue();
-                if (file != null){
-                    if (file.exists()){
+                if (file != null) {
+                    if (file.exists()) {
                         boolean deleted = file.delete();
 
-                        if (!deleted){
+                        if (!deleted) {
 
-                            String text = "File "+file.getAbsolutePath()+" was not deleted. Please delete it manually";
+                            String text = "File " + file.getAbsolutePath() + " was not deleted. Please delete it manually";
                             Toast.makeText(mContext, text, Toast.LENGTH_LONG).show();
 
                         }
@@ -242,10 +392,9 @@ public class ValuationInstance {
                 } else {
 
 
-                    Log.d("Delete", "File "+stringFileEntry+" was not deleted. Please delete it manually");
+                    Log.d("Delete", "File " + stringFileEntry + " was not deleted. Please delete it manually");
 
                 }
-
 
 
             }
@@ -254,7 +403,6 @@ public class ValuationInstance {
 
 
     }
-
 
 
 }

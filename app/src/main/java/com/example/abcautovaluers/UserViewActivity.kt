@@ -161,7 +161,7 @@ class UserViewActivity : AppCompatActivity() {
             SIGNIN_CODE -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
 
-                    handleSignInResult(data);
+                    handleSignInResult(data)
                 }
             }
         }
@@ -201,6 +201,7 @@ class UserViewActivity : AppCompatActivity() {
                 val intent = Intent(this@UserViewActivity, DashboardActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 intent.putExtra(DashboardActivity.USER_ADDED, true)
+                intent.putExtra(DashboardActivity.ASSIGNED, false)
                 startActivity(intent)
 
             }

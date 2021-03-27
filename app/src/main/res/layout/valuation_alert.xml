@@ -49,7 +49,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button_start"
+            android:id="@+id/button_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -57,7 +57,7 @@
             android:layout_marginEnd="24dp"
             android:layout_toEndOf="@+id/button_proceed"
             android:background="@drawable/bg_button"
-            android:text="@string/start_new"
+            android:text="@string/cancel"
             android:textColor="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

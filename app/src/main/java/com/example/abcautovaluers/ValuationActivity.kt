@@ -24,6 +24,12 @@ class ValuationActivity : AppCompatActivity() {
     private lateinit var valuationInstance: ValuationInstance
     private val takePicIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
+    private lateinit var scheduleDetails: ScheduleDetails
+
+    companion object {
+        const val SCHEDULED_STRING = "schedule_data"
+    }
+
     private var resultPresent: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,11 +38,15 @@ class ValuationActivity : AppCompatActivity() {
 
         valuationInstance = ValuationInstance(this)
 
-        val plateNumberSet = valuationInstance.plateNumber
-
-        if (plateNumberSet != null){
-            textPlateNumber.editText?.setText(plateNumberSet)
+        if (valuationInstance.checkValuation()) {
+            scheduleDetails = valuationInstance.scheduleDetails
+        } else {
+            scheduleDetails = intent.getParcelableExtra(SCHEDULED_STRING)
+            valuationInstance.addScheduleDetails(scheduleDetails)
         }
+
+        textPlateNumber.editText?.setText(scheduleDetails.plateNumber)
+
 
         if (takePicIntent.resolveActivity(this.packageManager) != null) {
 
@@ -102,14 +112,24 @@ class ValuationActivity : AppCompatActivity() {
             }
             valuationData[ValuationInstance.KEY_FRONT_RIGHT] == null -> {
 
-                handleErrorDisplay( getString(R.string.error_message, ValuationInstance.KEY_FRONT_RIGHT))
+                handleErrorDisplay(
+                    getString(
+                        R.string.error_message,
+                        ValuationInstance.KEY_FRONT_RIGHT
+                    )
+                )
 
                 return false
 
             }
             valuationData[ValuationInstance.KEY_FRONT_LEFT] == null -> {
 
-                handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_FRONT_LEFT))
+                handleErrorDisplay(
+                    getString(
+                        R.string.error_message,
+                        ValuationInstance.KEY_FRONT_LEFT
+                    )
+                )
 
                 return false
 
@@ -122,7 +142,12 @@ class ValuationActivity : AppCompatActivity() {
             }
             valuationData[ValuationInstance.KEY_REAR_RIGHT] == null -> {
 
-                handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_REAR_RIGHT))
+                handleErrorDisplay(
+                    getString(
+                        R.string.error_message,
+                        ValuationInstance.KEY_REAR_RIGHT
+                    )
+                )
 
                 return false
 
@@ -135,13 +160,23 @@ class ValuationActivity : AppCompatActivity() {
             }
             valuationData[ValuationInstance.KEY_HEAD_LIGHT] == null -> {
 
-                handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_HEAD_LIGHT))
+                handleErrorDisplay(
+                    getString(
+                        R.string.error_message,
+                        ValuationInstance.KEY_HEAD_LIGHT
+                    )
+                )
                 return false
 
             }
             valuationData[ValuationInstance.KEY_DASHBOARD] == null -> {
 
-                handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_DASHBOARD))
+                handleErrorDisplay(
+                    getString(
+                        R.string.error_message,
+                        ValuationInstance.KEY_DASHBOARD
+                    )
+                )
                 return false
 
             }
@@ -153,7 +188,12 @@ class ValuationActivity : AppCompatActivity() {
             }
             valuationData[ValuationInstance.KEY_INSURANCE] == null -> {
 
-                handleErrorDisplay(getString(R.string.error_message, ValuationInstance.KEY_INSURANCE))
+                handleErrorDisplay(
+                    getString(
+                        R.string.error_message,
+                        ValuationInstance.KEY_INSURANCE
+                    )
+                )
                 return false
 
             }
@@ -445,7 +485,7 @@ class ValuationActivity : AppCompatActivity() {
 
             val bitmap = BitmapFactory.decodeFile(file.path)
 
-            if (bitmap == null){
+            if (bitmap == null) {
 
                 valuationInstance.addValuationItem(key, null)
 
