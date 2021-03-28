@@ -3,6 +3,7 @@ package com.example.abcautovaluers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,7 +11,11 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -51,6 +56,10 @@ public class ValuationInstance {
     public static final String KEY_PHONE_NUMBER = "phone_number";
     public static final String KEY_SURNAME = "surname";
     public static final String KEY_CLIENT_ID = "client_id";
+    public static final String KEY_COUNTY = "county";
+    public static final String KEY_TOWN = "town";
+    public static final String KEY_DAY = "day";
+    public static final String KEY_TIME = "time";
     public static final String KEY_SCHEDULE_ID = "schedule_id";
 
 
@@ -106,8 +115,39 @@ public class ValuationInstance {
         String client_id = valSession.getString(KEY_CLIENT_ID, null);
         String schedule_id = valSession.getString(KEY_SCHEDULE_ID, null);
         String plate_no = valSession.getString(KEY_PLATE_NO, null);
+        String county = valSession.getString(KEY_COUNTY, null);
+        String town = valSession.getString(KEY_TOWN, null);
+        String day = valSession.getString(KEY_DAY, null);
+        String time = valSession.getString(KEY_TIME, null);
 
-        return new ScheduleDetails(surname, first_name, last_name, phone_number, email, client_id, schedule_id, plate_no, null, null, null, null, null, assigned_to, false);
+        return new ScheduleDetails(surname, first_name, last_name, phone_number, email, client_id, schedule_id, plate_no, county, town, null, day, time, assigned_to, false);
+    }
+
+
+    public File getScheduleFile(Boolean valuation) {
+        ScheduleDetails scheduleDetails = getScheduleDetails();
+        scheduleDetails.setValuated(valuation);
+
+        File storageDirectory = mContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+
+
+        try
+        {
+            File file = File.createTempFile("details", ".txt", storageDirectory);
+            FileWriter fw = new FileWriter(file.getAbsoluteFile(),false);
+            fw.write(scheduleDetails.toString());
+            fw.close();
+
+            return file;
+
+        }
+        catch(IOException ioe)
+        {
+            System.err.println("IOException: " + ioe.getMessage());
+
+            return null;
+        }
+
     }
 
 
@@ -119,8 +159,8 @@ public class ValuationInstance {
 
     public void clearInstance() {
 
-        deleteFiles();
-        editor.clear().commit();
+        //deleteFiles();
+        //editor.clear().commit();
 
     }
 

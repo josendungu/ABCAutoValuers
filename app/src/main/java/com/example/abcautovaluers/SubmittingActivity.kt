@@ -28,6 +28,8 @@ class SubmittingActivity : AppCompatActivity() {
     private val tag = "Submitting"
     private val SIGNIN_CODE = 1
     private lateinit var mContext: Context
+    private lateinit var scheduleDetails: ScheduleDetails
+    private lateinit var valuationInstance: ValuationInstance
 
     private val handler = Handler()
 
@@ -37,10 +39,13 @@ class SubmittingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submitting)
 
+        valuationInstance = ValuationInstance(this)
+        scheduleDetails =  valuationInstance.scheduleDetails
+
         mContext = this
 
         val networkConnection = NetworkConnection(applicationContext)
-        networkConnection.observe(this, Observer {
+        networkConnection.observe(this, {
 
             if (it){
 
@@ -73,14 +78,15 @@ class SubmittingActivity : AppCompatActivity() {
     private fun initializeImagesUpload(){
 
         val resultReceiver = MyResultReceiver(handler)
-        val valuationInstance = ValuationInstance(this)
         val valuationData = valuationInstance.valuationData
+        val scheduleFile = valuationInstance.getScheduleFile(true)
 
 
         val intent = Intent(this, SubmittingService::class.java)
         intent.putExtra("account", account)
         intent.putExtra("folderId", SessionManager(this).folderId)
         intent.putExtra("data", valuationData)
+        intent.putExtra("scheduleFile", scheduleFile)
         intent.putExtra("plate_no", valuationInstance.plateNumber)
         intent.putExtra("receiver", resultReceiver)
         startService(intent)
@@ -114,7 +120,7 @@ class SubmittingActivity : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK && data != null) {
 
                     Log.d(tag, "Intent in")
-                    handleSignInResult(data);
+                    handleSignInResult(data)
                 }
             }
         }
@@ -169,11 +175,24 @@ class SubmittingActivity : AppCompatActivity() {
                 }
 
                 IMAGES_UPLOADED -> {
+                    Toast.makeText(mContext, "Photos successfully uploaded.", Toast.LENGTH_LONG).show()
+
+                }
+
+                FILE_UPLOADED -> {
+
+                    val reference = FirebaseUtil.openFirebaseReference("ScheduledValuations")
+                    reference.child(scheduleDetails.scheduleId!!).removeValue()
 
                     PopulateAlert(KEY_SUCCESS_IMAGES, mContext as Activity)
 
                 }
 
+                FILE_FAILURE -> {
+
+                    PopulateAlert(KEY_ERROR_UPLOAD, mContext as Activity)
+
+                }
                 ERROR_OCCURRED -> {
 
                     PopulateAlert(KEY_ERROR_UPLOAD, mContext as Activity)

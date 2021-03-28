@@ -41,8 +41,6 @@ class ValuationRecyclerAdapter(
         valuationData = ValuationInstance(context).valuationPresentState
 
         val key = list[position]
-        Log.d("Identifier: Name", key)
-        Log.d("Identifier: Id", position.toString())
         val filePath = valuationData[key]
 
         if (filePath != null) {

@@ -26,6 +26,7 @@ class SubmittingService : IntentService("SubmittingService") {
 
     private lateinit var plateNumber: String
     private lateinit var folderId: String
+    private lateinit var scheduleFile: File
     private lateinit var resultReceiver: ResultReceiver
 
     override fun onHandleIntent(p0: Intent?) {
@@ -34,7 +35,9 @@ class SubmittingService : IntentService("SubmittingService") {
         resultReceiver = p0.extras?.get("receiver") as ResultReceiver
         folderId = p0.extras?.get("folderId") as String
         valuationData = p0.extras?.getSerializable("data") as HashMap<String, File>
-        plateNumber = p0.extras?.get("plate_no") as String;
+        plateNumber = p0.extras?.get("plate_no") as String
+        scheduleFile =p0.extras?.get("scheduleFile") as File
+
 
         mDriveServiceHelper = DriveServiceHelper(getGoogleDriveService(account))
 
@@ -60,12 +63,11 @@ class SubmittingService : IntentService("SubmittingService") {
 
     private fun handleSaveValuation() {
 
-        val googleDriveFileHolder: GoogleDriveFileHolder? = null
         val date = Calendar.getInstance().time
         val formatter = SimpleDateFormat.getDateTimeInstance() //or use getDateInstance()
         val formattedDate = formatter.format(date)
         val specificFolder = "$plateNumber/$formattedDate"
-        Log.d("Submitting Folder", folderId)
+        Log.d("File", scheduleFile.toString())
 
         mDriveServiceHelper.createFolder(specificFolder, folderId)
 
@@ -93,6 +95,48 @@ class SubmittingService : IntentService("SubmittingService") {
                         )
                         resultReceiver.send(IMAGES_UPLOADED, bundle1)
 
+                        mDriveServiceHelper.createFile(specificFolderCreated.id, scheduleFile)
+                            .addOnSuccessListener { folderId: String? ->
+
+                                if (folderId != null) {
+                                    if (folderId.isEmpty()){
+                                        val bundleFileFailure = Bundle()
+                                        bundleFileFailure.putString(
+                                            BUNDLE_FILE_FAILURE,
+                                            "File not uploaded"
+                                        )
+
+                                        resultReceiver.send(FILE_FAILURE, bundleFileFailure)
+
+                                    } else {
+                                        val bundleFileSuccess = Bundle()
+                                        bundleFileSuccess.putString(
+                                            BUNDLE_FILE_UPLOADED,
+                                            "File has been uploaded"
+                                        )
+                                        resultReceiver.send(FILE_UPLOADED, bundleFileSuccess)
+                                    }
+                                } else {
+                                    val bundleFileFailure = Bundle()
+                                    bundleFileFailure.putString(
+                                        BUNDLE_FILE_FAILURE,
+                                        "File not uploaded"
+                                    )
+
+                                    resultReceiver.send(FILE_FAILURE, bundleFileFailure)
+                                }
+                            }
+                            .addOnFailureListener {
+                                val bundleFileFailure = Bundle()
+                                bundleFileFailure.putString(
+                                    BUNDLE_FILE_FAILURE,
+                                    "File not uploaded"
+                                )
+
+                                resultReceiver.send(FILE_FAILURE, bundleFileFailure)
+
+                            }
+
                     }
                     .addOnFailureListener { exceptionImages ->
 
@@ -115,7 +159,7 @@ class SubmittingService : IntentService("SubmittingService") {
 
     private fun sendFailure() {
 
-        val bundleError: Bundle = Bundle()
+        val bundleError = Bundle()
         bundleError.putString(BUNDLE_ERROR, "There has been an error! Please try again ")
         resultReceiver.send(ERROR_OCCURRED, bundleError)
 

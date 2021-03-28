@@ -22,6 +22,8 @@ const val FOLDER_CREATED = 70
 const val IMAGES_UPLOADED = 71
 const val ERROR_OCCURRED = 72
 const val FOLDER_EXISTS = 73
+const val FILE_UPLOADED = 74
+const val FILE_FAILURE = 75
 
 const val BUNDLE_FOLDER_CREATED = "folder_created"
 const val BUNDLE_IMAGES_UPLOADED = "images_uploaded"
@@ -30,6 +32,8 @@ const val BUNDLE_MEMBER_DOES_NOT_EXIST = "member_does_not_exist"
 const val BUNDLE_ERROR = "error"
 const val BUNDLE_FOLDER_EXISTS = "exists"
 const val BUNDLE_FOLDER_ID = "folder_id"
+const val BUNDLE_FILE_UPLOADED = "file_uploaded"
+const val BUNDLE_FILE_FAILURE = "file_failure"
 
 const val KEY_VALUATION_ALERT = 1
 const val KEY_BACK_PRESSED_ALERT = 4

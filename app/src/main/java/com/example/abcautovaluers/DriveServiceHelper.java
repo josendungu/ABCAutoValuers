@@ -93,10 +93,10 @@ public class DriveServiceHelper {
     /**
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
-    public Task<String> createFile(final String folderId) {
+    public Task<String> createFile(final String folderId, final java.io.File file) {
         return Tasks.call(mExecutor, new Callable<String>() {
             @Override
-            public String call() throws Exception {
+            public String call()  {
 
                 try {
 
@@ -113,14 +113,16 @@ public class DriveServiceHelper {
                     File metadata = new File()
                             .setParents(root)
                             .setMimeType("text/plain")
-                            .setName("Untitled file");
+                            .setName("Valuation Details");
 
-                    File googleFile = mDriveService.files().create(metadata).execute();
-                    if (googleFile == null) {
+                    FileContent fileContent = new FileContent("text/plain", file);
+                    File fileMeta = mDriveService.files().create(metadata, fileContent).setFields("id").execute();
+
+                    if (fileMeta == null) {
                         throw new IOException("Null result when requesting file creation.");
                     }
 
-                    return googleFile.getId();
+                    return fileMeta.getId();
                 } catch (Exception e){
 
                     Log.d(tag,"Exception thrown: "+e.toString());
