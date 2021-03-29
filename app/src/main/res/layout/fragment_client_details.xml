@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackGround"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:layout_height="match_parent"
+    tools:context=".ClientDetailsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="35dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="35dp" />
+
+
+        <TextView
+            android:id="@+id/text_slogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/client_details"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_name"
+            style="@style/TextInputLayoutStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/name"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/text_slogan">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:inputType="textCapSentences"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_email"
+            style="@style/TextInputLayoutStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/email"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/et_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:inputType="textCapSentences"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_phone"
+            style="@style/TextInputLayoutStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/phone_number"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/et_email">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:inputType="phone"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_address"
+            style="@style/TextInputLayoutStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/address"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/et_phone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:inputType="textCapSentences"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+        
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
+            android:padding="10dp"
+            android:id="@+id/provided_text"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/et_address"
+            android:text="@string/provided"/>
+
+        <CheckBox
+            android:layout_width="0dp"
+            android:id="@+id/identification"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/provided_text"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/identification_card" />
+
+        <CheckBox
+            android:layout_width="0dp"
+            android:id="@+id/kra"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/identification"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/kra" />
+
+        <CheckBox
+            android:layout_width="0dp"
+            android:id="@+id/log_book"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/kra"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/log_book" />
+
+        <CheckBox
+            android:layout_width="0dp"
+            android:id="@+id/valuation_letter"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/log_book"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/valuation_letter" />
+
+        <Button
+            android:id="@+id/buttonNext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/bg_button"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="@string/next"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/valuation_letter" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

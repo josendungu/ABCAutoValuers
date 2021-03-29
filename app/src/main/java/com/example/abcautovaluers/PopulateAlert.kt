@@ -38,8 +38,8 @@ class PopulateAlert(
 
                     ValuationInstance(activity).clearInstance()
                     dialog.cancel()
+                    ValuationInstance(activity).addScheduleDetails(scheduleDetails)
                     val intent = Intent(activity, ValuationActivity::class.java)
-                    intent.putExtra(ValuationActivity.SCHEDULED_STRING , scheduleDetails)
                     activity.startActivity(intent)
 
                 }
@@ -81,6 +81,7 @@ class PopulateAlert(
                     val intent = Intent(activity, DashboardActivity::class.java)
                     intent.putExtra(DashboardActivity.ASSIGNED, false)
                     intent.putExtra(DashboardActivity.USER_ADDED, false)
+                    intent.putExtra(DashboardActivity.VALUATION_DELETED, false)
                     activity.startActivity(intent)
 
                 }
@@ -107,6 +108,7 @@ class PopulateAlert(
                     val intent = Intent(activity, DashboardActivity::class.java)
                     intent.putExtra(DashboardActivity.USER_ADDED, false)
                     intent.putExtra(DashboardActivity.ASSIGNED, false)
+                    intent.putExtra(DashboardActivity.VALUATION_DELETED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
 
@@ -118,6 +120,7 @@ class PopulateAlert(
                     dialog.cancel()
                     val intent = Intent(activity, DashboardActivity::class.java)
                     intent.putExtra(DashboardActivity.USER_ADDED, false)
+                    intent.putExtra(DashboardActivity.VALUATION_DELETED, false)
                     intent.putExtra(DashboardActivity.ASSIGNED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)
@@ -143,6 +146,7 @@ class PopulateAlert(
                     ValuationInstance(activity).clearInstance()
                     val intent = Intent(activity, DashboardActivity::class.java)
                     intent.putExtra(DashboardActivity.USER_ADDED, false)
+                    intent.putExtra(DashboardActivity.VALUATION_DELETED, false)
                     intent.putExtra(DashboardActivity.ASSIGNED, false)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     activity.startActivity(intent)

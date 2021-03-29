@@ -4,13 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.ResultReceiver
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -18,7 +18,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
 import kotlinx.android.synthetic.main.activity_submitting.*
-import kotlinx.android.synthetic.main.activity_submitting.connection_state
+import java.io.File
+import java.io.FileWriter
+import java.io.IOException
 
 
 class SubmittingActivity : AppCompatActivity() {
@@ -31,6 +33,14 @@ class SubmittingActivity : AppCompatActivity() {
     private lateinit var scheduleDetails: ScheduleDetails
     private lateinit var valuationInstance: ValuationInstance
 
+    private lateinit var valuationDetails: ValuationDetails
+
+    private lateinit var file: File
+
+    companion object{
+        const val VALUATION_KEY = "valuation_key"
+    }
+
     private val handler = Handler()
 
     private var account: GoogleSignInAccount? = null
@@ -42,12 +52,18 @@ class SubmittingActivity : AppCompatActivity() {
         valuationInstance = ValuationInstance(this)
         scheduleDetails =  valuationInstance.scheduleDetails
 
+        valuationDetails = intent.getParcelableExtra(VALUATION_KEY)
         mContext = this
+
+        textError.setOnClickListener{
+            it.visibility = View.GONE
+            initializeImagesUpload()
+        }
 
         val networkConnection = NetworkConnection(applicationContext)
         networkConnection.observe(this, {
 
-            if (it){
+            if (it) {
 
                 connection_state.visibility = View.VISIBLE
                 connection_state.text = getString(R.string.connected)
@@ -79,14 +95,27 @@ class SubmittingActivity : AppCompatActivity() {
 
         val resultReceiver = MyResultReceiver(handler)
         val valuationData = valuationInstance.valuationData
-        val scheduleFile = valuationInstance.getScheduleFile(true)
+
+        val storageDirectory = mContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+
+        try {
+            val file = File.createTempFile("details", ".txt", storageDirectory)
+            val fw = FileWriter(file.absoluteFile, false)
+            fw.write(valuationDetails.toString())
+            fw.close()
+            this.file = file
+        } catch (ioe: IOException) {
+            textError.visibility = View.VISIBLE
+            System.err.println("IOException: " + ioe.message)
+            return
+        }
 
 
         val intent = Intent(this, SubmittingService::class.java)
         intent.putExtra("account", account)
         intent.putExtra("folderId", SessionManager(this).folderId)
+        intent.putExtra("valuationFile", file)
         intent.putExtra("data", valuationData)
-        intent.putExtra("scheduleFile", scheduleFile)
         intent.putExtra("plate_no", valuationInstance.plateNumber)
         intent.putExtra("receiver", resultReceiver)
         startService(intent)
@@ -170,21 +199,32 @@ class SubmittingActivity : AppCompatActivity() {
 
                 FOLDER_CREATED -> {
 
-                    Toast.makeText(mContext, "Appropriate folders created.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(mContext, "Appropriate folders created.", Toast.LENGTH_LONG)
+                        .show()
 
                 }
 
                 IMAGES_UPLOADED -> {
-                    Toast.makeText(mContext, "Photos successfully uploaded.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(mContext, "Photos successfully uploaded.", Toast.LENGTH_LONG)
+                        .show()
 
                 }
 
                 FILE_UPLOADED -> {
 
-                    val reference = FirebaseUtil.openFirebaseReference("ScheduledValuations")
-                    reference.child(scheduleDetails.scheduleId!!).removeValue()
+                    val deleteReference = FirebaseUtil.openFirebaseReference("ScheduledValuations")
+                    val addReference = FirebaseUtil.openFirebaseReference("CompletedValuations")
 
-                    PopulateAlert(KEY_SUCCESS_IMAGES, mContext as Activity)
+                    addReference.push().setValue(valuationDetails)
+                        .addOnSuccessListener {
+                            deleteReference.child(scheduleDetails.scheduleId!!).removeValue()
+                                .addOnSuccessListener {
+                                    PopulateAlert(KEY_SUCCESS_IMAGES, mContext as Activity)
+                                }
+                        }
+                        .addOnFailureListener {
+                            PopulateAlert(KEY_ERROR_UPLOAD, mContext as Activity)
+                        }
 
                 }
 

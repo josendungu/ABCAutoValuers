@@ -59,14 +59,14 @@ class ScheduleViewActivity : AppCompatActivity() {
                     }
 
                     val userNames = mutableListOf<String>()
-                    userNames.add("")
+                    userNames.add("Assign user")
 
                     for (item in users) {
                         item?.username?.let { it1 -> userNames.add(it1) }
                     }
 
                     val spinnerAdapter =
-                        ArrayAdapter(this, android.R.layout.simple_spinner_item, userNames)
+                        ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, userNames)
                     spinner.adapter = spinnerAdapter
 
 
@@ -99,7 +99,7 @@ class ScheduleViewActivity : AppCompatActivity() {
             if (user.admin == true) {
 
                 progressBarSubmit.visibility = View.VISIBLE
-                if (selectedUser != null) {
+                if (selectedUser != null ) {
                     scheduleDetails.assignedTo = selectedUser?.username
 
 
@@ -110,6 +110,7 @@ class ScheduleViewActivity : AppCompatActivity() {
                             progressBarSubmit.visibility = View.INVISIBLE
                             val intent = Intent(this, DashboardActivity::class.java)
                             intent.putExtra(DashboardActivity.USER_ADDED, false)
+                            intent.putExtra(DashboardActivity.VALUATION_DELETED, false)
                             intent.putExtra(DashboardActivity.ASSIGNED, true)
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
@@ -131,8 +132,8 @@ class ScheduleViewActivity : AppCompatActivity() {
 
                 } else {
 
+                    valuationInstance.addScheduleDetails(scheduleDetails)
                     val intent = Intent(this, ValuationActivity::class.java)
-                    intent.putExtra(ValuationActivity.SCHEDULED_STRING, scheduleDetails)
                     startActivity(intent)
 
                 }

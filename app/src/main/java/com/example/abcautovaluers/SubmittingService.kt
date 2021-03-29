@@ -5,14 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.ResultReceiver
 import android.util.Log
-import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
-import com.google.gson.Gson
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,7 +24,7 @@ class SubmittingService : IntentService("SubmittingService") {
 
     private lateinit var plateNumber: String
     private lateinit var folderId: String
-    private lateinit var scheduleFile: File
+    private lateinit var valuationFile: File
     private lateinit var resultReceiver: ResultReceiver
 
     override fun onHandleIntent(p0: Intent?) {
@@ -36,7 +34,7 @@ class SubmittingService : IntentService("SubmittingService") {
         folderId = p0.extras?.get("folderId") as String
         valuationData = p0.extras?.getSerializable("data") as HashMap<String, File>
         plateNumber = p0.extras?.get("plate_no") as String
-        scheduleFile =p0.extras?.get("scheduleFile") as File
+        valuationFile =p0.extras?.get("valuationFile") as File
 
 
         mDriveServiceHelper = DriveServiceHelper(getGoogleDriveService(account))
@@ -67,7 +65,7 @@ class SubmittingService : IntentService("SubmittingService") {
         val formatter = SimpleDateFormat.getDateTimeInstance() //or use getDateInstance()
         val formattedDate = formatter.format(date)
         val specificFolder = "$plateNumber/$formattedDate"
-        Log.d("File", scheduleFile.toString())
+        Log.d("File", valuationFile.toString())
 
         mDriveServiceHelper.createFolder(specificFolder, folderId)
 
@@ -95,7 +93,7 @@ class SubmittingService : IntentService("SubmittingService") {
                         )
                         resultReceiver.send(IMAGES_UPLOADED, bundle1)
 
-                        mDriveServiceHelper.createFile(specificFolderCreated.id, scheduleFile)
+                        mDriveServiceHelper.createFile(specificFolderCreated.id, valuationFile)
                             .addOnSuccessListener { folderId: String? ->
 
                                 if (folderId != null) {

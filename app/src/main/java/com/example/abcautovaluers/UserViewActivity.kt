@@ -200,6 +200,7 @@ class UserViewActivity : AppCompatActivity() {
                 Log.d("User Add","added")
                 val intent = Intent(this@UserViewActivity, DashboardActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.putExtra(DashboardActivity.VALUATION_DELETED, false)
                 intent.putExtra(DashboardActivity.USER_ADDED, true)
                 intent.putExtra(DashboardActivity.ASSIGNED, false)
                 startActivity(intent)

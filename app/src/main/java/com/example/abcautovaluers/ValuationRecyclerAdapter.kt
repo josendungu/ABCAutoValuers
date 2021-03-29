@@ -55,6 +55,8 @@ class ValuationRecyclerAdapter(
 
     }
 
+
+
     override fun getItemCount(): Int = list.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

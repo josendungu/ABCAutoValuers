@@ -19,13 +19,14 @@ class ScheduleListActivity : AppCompatActivity() {
 
         adapter.setData(listOf<ScheduleDetails>())
 
+        getScheduledList()
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule_list)
 
-        getScheduledList()
         setUpRecyclerView()
         userSession = SessionManager(this)
 

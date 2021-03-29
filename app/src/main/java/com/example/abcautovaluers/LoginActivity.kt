@@ -34,6 +34,8 @@ class LoginActivity : AppCompatActivity() {
             intent.putExtra(DashboardActivity.USER_REFERENCE, user)
             intent.putExtra(DashboardActivity.USER_ADDED, false)
             intent.putExtra(DashboardActivity.ASSIGNED, false)
+            intent.putExtra(DashboardActivity.VALUATION_DELETED, false)
+
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
 
@@ -104,6 +106,7 @@ class LoginActivity : AppCompatActivity() {
         intent.putExtra(DashboardActivity.USER_REFERENCE, user)
         intent.putExtra(DashboardActivity.USER_ADDED, false)
         intent.putExtra(DashboardActivity.ASSIGNED, false)
+        intent.putExtra(DashboardActivity.VALUATION_DELETED, false)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
 

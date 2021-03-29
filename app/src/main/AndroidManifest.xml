@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ScheduleViewActivity"/>
+        <activity android:name=".CompleteViewActivity"></activity>
+        <activity android:name=".CompletedListActivity" />
+        <activity android:name=".ScheduleViewActivity" />
         <activity android:name=".ScheduleListActivity" />
         <activity android:name=".UserViewActivity" />
 

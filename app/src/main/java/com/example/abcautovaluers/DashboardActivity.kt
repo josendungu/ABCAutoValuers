@@ -20,6 +20,7 @@ class DashboardActivity : AppCompatActivity() {
     companion object {
         const val USER_REFERENCE = "user_reference"
         const val USER_ADDED = "user_added"
+        const val VALUATION_DELETED = "valuation_deleted"
         const val ASSIGNED = "assigned"
     }
 
@@ -31,6 +32,7 @@ class DashboardActivity : AppCompatActivity() {
         val valuationInstance = ValuationInstance(this)
 
         checkUserAdded()
+        checkValuationDeleted()
         checkValuationAssigned()
 
         mUser = if (userSession.checkLoginState()) {
@@ -45,6 +47,23 @@ class DashboardActivity : AppCompatActivity() {
 
 
         userSession.setLoggedState(true)
+
+        completedValuations.setOnClickListener {
+            if (mUser.admin!!) {
+
+                val intent = Intent(this, CompletedListActivity::class.java)
+                startActivity(intent)
+
+            } else {
+
+                Snackbar.make(
+                    snackViewCont,
+                    "You do not have permission to view completed valuations",
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+            }
+        }
 
         addUser.setOnClickListener {
 
@@ -94,6 +113,20 @@ class DashboardActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    private fun checkValuationDeleted() {
+        val deleted = intent.extras?.get(VALUATION_DELETED) as Boolean
+
+        if (deleted) {
+
+            Snackbar.make(
+                snackViewCont,
+                "Valuation was successfully marked as complete",
+                Snackbar.LENGTH_LONG
+            ).show()
+
+        }
     }
 
 

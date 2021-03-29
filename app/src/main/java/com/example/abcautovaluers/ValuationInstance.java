@@ -73,7 +73,6 @@ public class ValuationInstance {
 
     }
 
-
     public void addValuationItem(String key, String filePath) {
 
         if (!checkValuation()) {
@@ -123,34 +122,6 @@ public class ValuationInstance {
         return new ScheduleDetails(surname, first_name, last_name, phone_number, email, client_id, schedule_id, plate_no, county, town, null, day, time, assigned_to, false);
     }
 
-
-    public File getScheduleFile(Boolean valuation) {
-        ScheduleDetails scheduleDetails = getScheduleDetails();
-        scheduleDetails.setValuated(valuation);
-
-        File storageDirectory = mContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-
-
-        try
-        {
-            File file = File.createTempFile("details", ".txt", storageDirectory);
-            FileWriter fw = new FileWriter(file.getAbsoluteFile(),false);
-            fw.write(scheduleDetails.toString());
-            fw.close();
-
-            return file;
-
-        }
-        catch(IOException ioe)
-        {
-            System.err.println("IOException: " + ioe.getMessage());
-
-            return null;
-        }
-
-    }
-
-
     public boolean checkValuation() {
 
         return valSession.getBoolean(KEY_VALUATION_PRESENT, false);
@@ -159,8 +130,8 @@ public class ValuationInstance {
 
     public void clearInstance() {
 
-        //deleteFiles();
-        //editor.clear().commit();
+        deleteFiles();
+        editor.clear().commit();
 
     }
 
