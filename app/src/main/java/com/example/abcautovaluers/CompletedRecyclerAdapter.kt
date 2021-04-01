@@ -1,5 +1,6 @@
 package com.example.abcautovaluers
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -28,16 +29,7 @@ class CompletedRecyclerAdapter(val context: Context): RecyclerView.Adapter<Compl
                 editTextPlateNumber.text = valuationDetails.registrationNumber
 
                 itemView.setOnClickListener {
-                    setData(emptyList())
-                    val deleteReference  = FirebaseUtil.openFirebaseReference("CompletedValuations")
-                    deleteReference.child(valuationDetails.valuationId!!).removeValue()
-                        .addOnSuccessListener {
-                            val intent = Intent(context, DashboardActivity::class.java)
-                            intent.putExtra(DashboardActivity.VALUATION_DELETED, true)
-                            intent.putExtra(DashboardActivity.USER_ADDED, false)
-                            intent.putExtra(DashboardActivity.ASSIGNED, false)
-                            context.startActivity(intent)
-                        }
+                    PopulateAlert(KEY_DELETE_COMPLETED_VALUATION, context as Activity, valuationId = valuationDetails.valuationId)
                 }
             }
 

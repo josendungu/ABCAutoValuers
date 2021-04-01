@@ -20,8 +20,6 @@ class CompletedListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_completed_list)
 
-        getValuationDetails()
-
         setUpRecyclerView()
 
         statusDisplay.setOnClickListener {
@@ -29,6 +27,12 @@ class CompletedListActivity : AppCompatActivity() {
                 getValuationDetails()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getValuationDetails()
+
     }
 
     private fun getValuationDetails(){

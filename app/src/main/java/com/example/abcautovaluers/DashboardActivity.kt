@@ -45,6 +45,10 @@ class DashboardActivity : AppCompatActivity() {
 
         }
 
+        if (mUser.admin == true){
+            scheduled_text.text = "Assign Valuations"
+        }
+
 
         userSession.setLoggedState(true)
 

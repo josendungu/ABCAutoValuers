@@ -120,5 +120,10 @@
     <string name="valuation_letter">Valuation Letter</string>
     <string name="log_book">Log Book</string>
     <string name="scheduled">Scheduled</string>
+    <string name="delete_valuation">Delete Valuation?</string>
+    <string name="delete_proceed">You are about to delete the valuation instance. do you still want to proceed</string>
+    <string name="delete">delete</string>
+    <string name="assigned_valuations">Assigned Valuations</string>
+    <string name="allow_permission">Please allow permission to make phone call</string>
 
 </resources>

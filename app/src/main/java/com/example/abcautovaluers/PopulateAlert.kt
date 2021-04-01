@@ -7,6 +7,7 @@ import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AlertDialog.Builder
 import kotlinx.android.synthetic.main.alert.view.*
+import kotlinx.android.synthetic.main.alert_delete_valuation.view.*
 import kotlinx.android.synthetic.main.back_pressed_alert.view.*
 import kotlinx.android.synthetic.main.valuation_alert.view.*
 import java.io.File
@@ -14,7 +15,9 @@ import java.io.File
 class PopulateAlert(
     instance: Int,
     activity: Activity,
-    scheduleDetails: ScheduleDetails? = null
+    scheduleDetails: ScheduleDetails? = null,
+    valuationId: String? = null
+
 ) {
 
     private lateinit var view: View
@@ -54,6 +57,37 @@ class PopulateAlert(
                 dialog.show()
 
             }
+
+            KEY_DELETE_COMPLETED_VALUATION -> {
+                view = inflater.inflate(R.layout.alert_delete_valuation, null)
+                alert.setView(view)
+                alert.setCancelable(false)
+                dialog = alert.create()
+
+                view.delete.setOnClickListener { button ->
+
+                    val deleteReference  = FirebaseUtil.openFirebaseReference("CompletedValuations")
+                    deleteReference.child(valuationId!!).removeValue()
+                        .addOnSuccessListener {
+                            button.isClickable = false
+                            dialog.cancel()
+                            val intent = Intent(activity, DashboardActivity::class.java)
+                            intent.putExtra(DashboardActivity.ASSIGNED, false)
+                            intent.putExtra(DashboardActivity.USER_ADDED, false)
+                            intent.putExtra(DashboardActivity.VALUATION_DELETED, true)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            activity.startActivity(intent)
+                        }
+
+                }
+
+                view.cancel.setOnClickListener {
+                    dialog.cancel()
+                }
+
+                dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+                dialog.show()
+            }
             KEY_ERROR -> {
 
                 view = inflater.inflate(R.layout.alert_error, null)
@@ -66,6 +100,9 @@ class PopulateAlert(
                     dialog.cancel()
 
                 }
+
+                dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+                dialog.show()
 
             }
             KEY_USER_ADD_FAILURE -> {
@@ -86,6 +123,9 @@ class PopulateAlert(
 
                 }
 
+                dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+                dialog.show()
+
             }
             KEY_ADDING_USER -> {
 
@@ -93,6 +133,9 @@ class PopulateAlert(
                 alert.setView(view)
                 alert.setCancelable(false)
                 dialog = alert.create()
+
+                dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+                dialog.show()
 
             }
             KEY_BACK_PRESSED_ALERT -> {

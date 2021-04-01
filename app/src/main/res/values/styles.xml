@@ -11,7 +11,7 @@
         <item name="android:textColorHint">@color/colorBlack</item>
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="boxStrokeWidthFocused">1.5dp</item>
-        <item name="boxStrokeColor">@color/colorBlack</item>
+        <item name="boxStrokeColor">@color/colorGrey</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="hintTextColor">@color/colorGrey</item>
         <item name="boxStrokeErrorColor">@color/colorBlack</item>

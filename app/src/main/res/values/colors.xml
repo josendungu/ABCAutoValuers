@@ -11,4 +11,6 @@
     <color name="colorTransparent">#00FFFFFF</color>
     <color name="colorBackGround">#DFDEDE</color>
 
+    <color name="mtrl_textinput_default_box_stroke_color">#000</color>
+
 </resources>

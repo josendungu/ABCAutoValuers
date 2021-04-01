@@ -1,12 +1,16 @@
 package com.example.abcautovaluers
 
+import android.Manifest
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
-import android.os.UserManager
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_schedule_view.*
 
@@ -18,6 +22,7 @@ class ScheduleViewActivity : AppCompatActivity() {
 
     private lateinit var scheduleDetails: ScheduleDetails
 
+    private val REQUEST_CALL = 1
 
     private var users = emptyList<User?>()
     private var selectedUser: User? = null
@@ -35,11 +40,25 @@ class ScheduleViewActivity : AppCompatActivity() {
 
         textDate.text = scheduleDetails.day
         textEmail.text = scheduleDetails.email
-        textNames.text =
-            "${scheduleDetails.surname} ${scheduleDetails.firstName} ${scheduleDetails.lastName}"
-        textPhoneNumber.text = "0${scheduleDetails.phoneNumber}"
+        "${scheduleDetails.surname} ${scheduleDetails.firstName} ${scheduleDetails.lastName}".also { textNames.text = it }
+        "${scheduleDetails.phoneNumber}".also { textPhoneNumber.text = it }
         textPlateNumber.text = scheduleDetails.plateNumber
         textTime.text = scheduleDetails.time
+
+
+        buttonCall.setOnClickListener {
+            val callIntent = Intent(Intent.ACTION_CALL)
+            callIntent.data = Uri.parse("tel:${scheduleDetails.phoneNumber}")
+
+            if (checkCallPermission()){
+                startActivity(callIntent)
+            } else {
+                spinnerError.visibility = View.VISIBLE
+                spinnerError.text = getString(R.string.allow_permission)
+            }
+
+
+        }
 
 
         if (user.admin == true) {
@@ -62,7 +81,9 @@ class ScheduleViewActivity : AppCompatActivity() {
                     userNames.add("Assign user")
 
                     for (item in users) {
-                        item?.username?.let { it1 -> userNames.add(it1) }
+                        if (item?.admin != true){
+                            item?.username?.let { it1 -> userNames.add(it1) }
+                        }
                     }
 
                     val spinnerAdapter =
@@ -82,7 +103,7 @@ class ScheduleViewActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     if (position != 0){
-                        selectedUser = users[position-1]
+                        selectedUser = users[position - 1]
                     }
 
                 }
@@ -116,7 +137,11 @@ class ScheduleViewActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
                         .addOnFailureListener {
-                            Snackbar.make(snackViewCont, "There was some problem assigning. Please try again", Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(
+                                snackViewCont,
+                                "There was some problem assigning. Please try again",
+                                Snackbar.LENGTH_LONG
+                            ).show()
                             progressBarSubmit.visibility = View.INVISIBLE
                         }
 
@@ -142,6 +167,22 @@ class ScheduleViewActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun checkCallPermission() : Boolean {
+        return if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CALL_PHONE),
+                REQUEST_CALL
+            )
+
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+
+
+        } else {
+            true
+        }
     }
 
     private fun setViewsVisible() {
