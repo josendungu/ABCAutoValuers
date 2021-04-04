@@ -52,7 +52,7 @@ class ClientDetailsFragment : Fragment() {
 
         myView.et_name.editText?.setText("${scheduleDetails.surname} ${scheduleDetails.firstName} ${scheduleDetails.lastName}")
         myView.et_email.editText?.setText(scheduleDetails.email)
-        myView.et_phone.editText?.setText("0${scheduleDetails.phoneNumber}")
+        myView.et_phone.editText?.setText(scheduleDetails.phoneNumber)
 
         myView.buttonNext.setOnClickListener {
 

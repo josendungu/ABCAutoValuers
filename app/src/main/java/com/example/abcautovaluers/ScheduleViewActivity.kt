@@ -25,7 +25,9 @@ class ScheduleViewActivity : AppCompatActivity() {
     private val REQUEST_CALL = 1
 
     private var users = emptyList<User?>()
-    private var selectedUser: User? = null
+    private var selectedUser: String? = null
+
+    private val userNames = mutableListOf<String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,10 +58,7 @@ class ScheduleViewActivity : AppCompatActivity() {
                 spinnerError.visibility = View.VISIBLE
                 spinnerError.text = getString(R.string.allow_permission)
             }
-
-
         }
-
 
         if (user.admin == true) {
 
@@ -77,7 +76,6 @@ class ScheduleViewActivity : AppCompatActivity() {
                         }
                     }
 
-                    val userNames = mutableListOf<String>()
                     userNames.add("Assign user")
 
                     for (item in users) {
@@ -90,10 +88,8 @@ class ScheduleViewActivity : AppCompatActivity() {
                         ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, userNames)
                     spinner.adapter = spinnerAdapter
 
-
                 }
             }
-
 
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -103,7 +99,7 @@ class ScheduleViewActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     if (position != 0){
-                        selectedUser = users[position - 1]
+                        selectedUser = userNames[position]
                     }
 
                 }
@@ -114,19 +110,19 @@ class ScheduleViewActivity : AppCompatActivity() {
             }
         }
 
-
         buttonSubmit.setOnClickListener {
 
             if (user.admin == true) {
 
                 progressBarSubmit.visibility = View.VISIBLE
                 if (selectedUser != null ) {
-                    scheduleDetails.assignedTo = selectedUser?.username
+                    scheduleDetails.assignedTo = selectedUser
 
 
                     val reference =
                         FirebaseUtil.openFirebaseReference("ScheduledValuations/${scheduleDetails.scheduleId}/assignedTo")
-                    reference.setValue(selectedUser!!.username)
+                    Log.d("Selected User", "onCreate: $selectedUser")
+                    reference.setValue(selectedUser)
                         .addOnSuccessListener {
                             progressBarSubmit.visibility = View.INVISIBLE
                             val intent = Intent(this, DashboardActivity::class.java)
@@ -165,7 +161,6 @@ class ScheduleViewActivity : AppCompatActivity() {
             }
 
         }
-
 
     }
 
