@@ -12,6 +12,7 @@ data class ValuationDetails(
     var phone: String? = null,
     var address: String? = null,
     var valuatedBy : String? = null,
+    var instructions: String? = null,
 
     var insurer: String? = null,
     var policyNumber: String? = null,
@@ -71,6 +72,7 @@ data class ValuationDetails(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
         parcel.createStringArrayList(),
         parcel.readString(),
         parcel.readString(),
@@ -95,6 +97,7 @@ data class ValuationDetails(
         parcel.writeString(phone)
         parcel.writeString(address)
         parcel.writeString(valuatedBy)
+        parcel.writeString(instructions)
         parcel.writeString(insurer)
         parcel.writeString(policyNumber)
         parcel.writeString(expiryDate)

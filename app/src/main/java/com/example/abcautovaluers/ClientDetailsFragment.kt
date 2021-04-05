@@ -72,7 +72,8 @@ class ClientDetailsFragment : Fragment() {
                     idProvided = myView.identification.isChecked,
                     valuationLetterProvided = myView.valuation_letter.isChecked,
                     pinCertificateProvided = myView.kra.isChecked,
-                    logBookProvided = myView.log_book.isChecked
+                    logBookProvided = myView.log_book.isChecked,
+                    instructions = scheduleDetails.instructions
                 )
 
                 viewModel.setValuationDetails(valuationDetails)

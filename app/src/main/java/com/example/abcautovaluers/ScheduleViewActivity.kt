@@ -144,6 +144,7 @@ class ScheduleViewActivity : AppCompatActivity() {
 
                 } else {
                     spinnerError.visibility = View.VISIBLE
+                    progressBarSubmit.visibility = View.INVISIBLE
                 }
             } else {
 

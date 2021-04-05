@@ -16,12 +16,14 @@ data class ScheduleDetails(
     var county: String? = null,
     var town: String? = null,
     var locationDetails: String? = null,
+    var instructions: String? = null,
     var day: String? = null,
     var time: String? = null,
     var assignedTo: String? = null,
     var valuated: Boolean = false
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -52,6 +54,7 @@ data class ScheduleDetails(
         parcel.writeString(county)
         parcel.writeString(town)
         parcel.writeString(locationDetails)
+        parcel.writeString(instructions)
         parcel.writeString(day)
         parcel.writeString(time)
         parcel.writeString(assignedTo)

@@ -61,6 +61,7 @@ public class ValuationInstance {
     public static final String KEY_DAY = "day";
     public static final String KEY_TIME = "time";
     public static final String KEY_SCHEDULE_ID = "schedule_id";
+    public static final String KEY_SCHEDULE_INSTRUCTIONS = "instructions";
 
 
     public ValuationInstance(Context context) {
@@ -102,6 +103,7 @@ public class ValuationInstance {
         addValuationItem(KEY_PHONE_NUMBER, scheduleDetails.getPhoneNumber());
         addValuationItem(KEY_CLIENT_ID, scheduleDetails.getId());
         addValuationItem(KEY_SCHEDULE_ID, scheduleDetails.getScheduleId());
+        addValuationItem(KEY_SCHEDULE_INSTRUCTIONS, scheduleDetails.getInstructions());
     }
 
     public ScheduleDetails getScheduleDetails() {
@@ -118,8 +120,9 @@ public class ValuationInstance {
         String town = valSession.getString(KEY_TOWN, null);
         String day = valSession.getString(KEY_DAY, null);
         String time = valSession.getString(KEY_TIME, null);
+        String instructions = valSession.getString(KEY_SCHEDULE_INSTRUCTIONS, null);
 
-        return new ScheduleDetails(surname, first_name, last_name, phone_number, email, client_id, schedule_id, plate_no, county, town, null, day, time, assigned_to, false);
+        return new ScheduleDetails(surname, first_name, last_name, phone_number, email, client_id, schedule_id, plate_no, county, town, null, instructions, day, time, assigned_to, false);
     }
 
     public boolean checkValuation() {

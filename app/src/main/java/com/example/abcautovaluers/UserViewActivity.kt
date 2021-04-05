@@ -14,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
+import com.google.android.material.snackbar.Snackbar
 import com.google.api.services.drive.DriveScopes
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -61,7 +62,6 @@ class UserViewActivity : AppCompatActivity() {
             if (validateUser() && validatePassword() && validateEmail()){
 
                 account = GoogleSignIn.getLastSignedInAccount(this)
-
                 validateUsername()
 
             } else {
@@ -160,10 +160,10 @@ class UserViewActivity : AppCompatActivity() {
 
             SIGNIN_CODE -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
-
                     handleSignInResult(data)
                 }
             }
+
         }
     }
 
@@ -175,6 +175,7 @@ class UserViewActivity : AppCompatActivity() {
                 Log.d("Account Added", "Signed in as ${it.email}")
                 accountSelected.text = it.email
                 account = it
+                Toast.makeText(this, "Account successfully selected", Toast.LENGTH_LONG).show()
                 initializeCreateFolder()
 
             }
