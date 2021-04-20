@@ -71,7 +71,6 @@
     <string name="compulsory">Fields marked * are compulsory</string>
     <string name="first_second">First Second</string>
     <string name="fetch_failed">There was a problem fetching data. Please click to retry</string>
-    <string name="location">Location</string>
     <string name="scheduled_valuations">Scheduled valuations</string>
     <string name="full_names">Full Names</string>
     <string name="phone_number">Phone Number</string>
@@ -125,5 +124,9 @@
     <string name="delete">delete</string>
     <string name="assigned_valuations">Assigned Valuations</string>
     <string name="allow_permission">Please allow permission to make phone call</string>
+    <string name="town">Town</string>
+    <string name="county">County</string>
+    <string name="location">Location</string>
+    <string name="location_not_provided">Location details were not provided</string>
 
 </resources>

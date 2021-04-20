@@ -46,6 +46,13 @@ class ScheduleViewActivity : AppCompatActivity() {
         "${scheduleDetails.phoneNumber}".also { textPhoneNumber.text = it }
         textPlateNumber.text = scheduleDetails.plateNumber
         textTime.text = scheduleDetails.time
+        textCounty.text = scheduleDetails.county
+        textTown.text = scheduleDetails.town
+        if (scheduleDetails.locationDetails.isNullOrEmpty()){
+            textLocation.text = getString(R.string.location_not_provided)
+        } else {
+            textLocation.text = scheduleDetails.locationDetails
+        }
 
 
         buttonCall.setOnClickListener {
