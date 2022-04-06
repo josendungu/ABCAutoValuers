@@ -37,6 +37,7 @@ class SubmittingService : IntentService("SubmittingService") {
         valuationFile =p0.extras?.get("valuationFile") as File
 
 
+
         mDriveServiceHelper = DriveServiceHelper(getGoogleDriveService(account))
 
         handleSaveValuation()

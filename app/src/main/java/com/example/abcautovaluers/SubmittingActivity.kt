@@ -53,6 +53,7 @@ class SubmittingActivity : AppCompatActivity() {
         scheduleDetails =  valuationInstance.scheduleDetails
 
         valuationDetails = intent.getParcelableExtra(VALUATION_KEY)
+        Log.d(tag, "Valuation details: " + valuationDetails.toString())
         mContext = this
 
         textError.setOnClickListener{
@@ -90,6 +91,8 @@ class SubmittingActivity : AppCompatActivity() {
 
 
     }
+
+
 
     private fun initializeImagesUpload(){
 
